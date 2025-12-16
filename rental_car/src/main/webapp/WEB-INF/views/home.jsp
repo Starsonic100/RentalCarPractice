@@ -19,6 +19,7 @@
 		<p><a href="rental/searchRentalForm" class="link-primary">Check reservation</a></p>
 		<p><a href="rental/activeRents" class="link-primary">Return car</a></p>
 		<p><a href="rental/inactiveRents" class="link-primary">Activate rent</a></p>
+		<br>
 		<!-- Sign Up -->
 		<!-- <br> -->
 		<!-- Login -->
