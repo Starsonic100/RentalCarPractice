@@ -14,15 +14,15 @@
 </header>
 <body>
 <c:choose>
-<c:when test="${rental1!=null}">
+<c:when test="${selectedRental!=null}">
 	<div class="container">
 		<div class="row">
-				<h5>Requested data for Rent Id: ${rental1.getIdRent()}</h5>
+				<h5>Requested data for Rent Id: ${selectedRental.getIdRent()}</h5>
 				<div class="col-md-4">
 					<table class="table table-striped-columns">
 					<tr><td>Full name </td> <td>${person.getName()} ${person.getSurname()}</td></tr>
-					<tr><td>Start Date </td> <td>${rental1.getStart_date()}</td></tr>
-					<tr><td>End Date</td><td> ${rental1.getEnd_date()}</td></tr>
+					<tr><td>Start Date </td> <td>${selectedRental.getStart_date()}</td></tr>
+					<tr><td>End Date</td><td> ${selectedRental.getEnd_date()}</td></tr>
 					<tr><td>Model</td><td> ${car.getModel()}</td></tr>
 					<tr><td>License Plate</td><td> ${car.getLicense_plate()}</td></tr>
 					<tr><td>Final Price</td><td> ${car.getPrice()}</td></tr>
@@ -31,7 +31,7 @@
 		</div>
 </div>
 </c:when>
-<c:when test="${rental1==null}">
+<c:when test="${selectedRental==null}">
 <div class="container">
 	<div class="row">
 		<h4>No rent has been found</h4>
