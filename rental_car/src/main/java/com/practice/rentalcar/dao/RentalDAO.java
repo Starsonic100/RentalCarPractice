@@ -20,13 +20,13 @@ public class RentalDAO implements IRentalDAO {
 		int idRental;
 		int active = 0;
 		LocalDate currentDate = LocalDate.now();
-		if(currentDate.toString().equals(rental.getStart_date())) {
+		if(currentDate.toString().equals(rental.getStartDate())) {
 			active = 1;
 		}
 		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Rental.class).buildSessionFactory();
 		Session mySession = myFactory.openSession();
 		try {
-			Rental newRent = new Rental(rental.getStart_date(), rental.getEnd_date(), rental.getIdCar(), rental.getIdPerson(), active);
+			Rental newRent = new Rental(rental.getStartDate(), rental.getEndDate(), rental.getIdCar(), rental.getIdPerson(), active);
 			mySession.beginTransaction();
 			mySession.persist(newRent);
 			mySession.getTransaction().commit();
@@ -76,9 +76,9 @@ public class RentalDAO implements IRentalDAO {
 				rental.setCar(car);
 				rental.setPerson(person);
 				rental.setIdRent((Integer)row[0]);
-				rental.setStart_date(row[1].toString());
-				rental.setEnd_date(row[2].toString());
-				rental.getCar().setLicense_plate(row[3].toString());
+				rental.setStartDate(row[1].toString());
+				rental.setEndDate(row[2].toString());
+				rental.getCar().setLicensePlate(row[3].toString());
 				rental.getCar().setModel(row[4].toString());
 				rental.getPerson().setName(row[5].toString());
 				rental.getPerson().setSurname(row[6].toString());
@@ -114,9 +114,9 @@ public class RentalDAO implements IRentalDAO {
 				rental.setCar(car);
 				rental.setPerson(person);
 				rental.setIdRent((Integer)row[0]);
-				rental.setStart_date(row[1].toString());
-				rental.setEnd_date(row[2].toString());
-				rental.getCar().setLicense_plate(row[3].toString());
+				rental.setStartDate(row[1].toString());
+				rental.setEndDate(row[2].toString());
+				rental.getCar().setLicensePlate(row[3].toString());
 				rental.getCar().setModel(row[4].toString());
 				rental.getPerson().setName(row[5].toString());
 				rental.getPerson().setSurname(row[6].toString());
@@ -131,25 +131,16 @@ public class RentalDAO implements IRentalDAO {
 	}
 	
 	@Override
-	public void updateRental(int idRent, String actionRental) {
+	public void updateRental(int idRent, int actionRental) {
 		LocalDate currentDate = LocalDate.now();
 		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Rental.class).buildSessionFactory();
 		Session mySession = myFactory.openSession();
 		try {
 			mySession.beginTransaction();
 			Rental selectedRental = mySession.get(Rental.class, idRent);
-			switch(actionRental) {
-				case "returnCar":
-					selectedRental.setActive(0);
-					selectedRental.setEnd_date(currentDate.toString());
-					mySession.getTransaction().commit();
-					break;
-				case "activeRent":
-					selectedRental.setActive(1);
-					selectedRental.setStart_date(currentDate.toString());
-					mySession.getTransaction().commit();
-					break;
-			}
+			selectedRental.setActive(actionRental);
+			if(actionRental == 1) selectedRental.setStartDate(currentDate.toString()); else selectedRental.setEndDate(currentDate.toString());
+			mySession.getTransaction().commit();
 		}
 		finally {
 			mySession.close();

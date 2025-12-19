@@ -39,7 +39,7 @@ public class RentalService implements IRentalService {
 	
 	
 	@Override
-	public void updateRental(int idRent, String actionRental) {
+	public void updateRental(int idRent, int actionRental) {
 		rentalDAO.updateRental(idRent, actionRental);
 	}
 

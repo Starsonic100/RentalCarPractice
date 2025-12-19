@@ -14,8 +14,8 @@ import com.practice.rentalcar.customvalidations.ValidateSelectCar;
 public class Car {
 	
 	
-	public Car(String license_plate, String model, String type, int price, int available) {
-		this.license_plate = license_plate;
+	public Car(String licensePlate, String model, String type, int price, int available) {
+		this.licensePlate = licensePlate;
 		this.model = model;
 		this.type = type;
 		this.price = price;
@@ -33,11 +33,11 @@ public class Car {
 	@NotNull(groups = ValidateSelectCar.class, message="Please select a car")
 	@Positive(groups = ValidateSelectCar.class, message="Please select a car")
 	@Id
-	@Column(name="idCars")
+	@Column(name="id")
 	private int idCar;
 
 	@Column(name="license_plate")
-	private String license_plate;
+	private String licensePlate;
 	
 	@Column(name="model")
 	private String model;
@@ -71,12 +71,12 @@ public class Car {
 		this.idCar = idCar;
 	}
 
-	public String getLicense_plate() {
-		return license_plate;
+	public String getLicensePlate() {
+		return licensePlate;
 	}
 
-	public void setLicense_plate(String license_plate) {
-		this.license_plate = license_plate;
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
 	}
 
 	public String getModel() {

@@ -53,8 +53,8 @@ public class RentalController {
 	@RequestMapping("/createRent")
 	public String createRent(@ModelAttribute("person") Person person, @ModelAttribute("car") Car car, Model model) {
 		Rental rental = new Rental();
-		rental.setStart_date(car.getStartDate());
-		rental.setEnd_date(car.getEndDate());
+		rental.setStartDate(car.getStartDate());
+		rental.setEndDate(car.getEndDate());
 		rental.setIdCar(car.getIdCar());
 		rental.setIdPerson(person.getId());
 		rental.setIdRent(this.rentalService.addRental(rental));
@@ -113,7 +113,7 @@ public class RentalController {
 			return viewMap;	
 		}
 		else {
-			this.rentalService.updateRental(rental.getIdRent(), "returnCar");
+			this.rentalService.updateRental(rental.getIdRent(), 0);
 			ModelAndView viewMap = new ModelAndView("carReturnMessage");
 			return viewMap;
 		}
@@ -145,7 +145,7 @@ public class RentalController {
 			return viewMap;	
 		}
 		else {
-			this.rentalService.updateRental(rental.getIdRent(), "activeRent");
+			this.rentalService.updateRental(rental.getIdRent(), 1);
 			ModelAndView viewMap = new ModelAndView("rentInactiveMessage");
 			return viewMap;
 		}

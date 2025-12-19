@@ -27,7 +27,7 @@ public class CarDAO implements ICarDAO {
 				// TODO Auto-generated method stub
 				Car car = new Car();
 				car.setIdCar(rs.getInt("idCars"));
-				car.setLicense_plate(rs.getString("license_plate"));
+				car.setLicensePlate(rs.getString("license_plate"));
 				car.setModel(rs.getString("model"));
 				car.setType(rs.getString("type"));
 				car.setPrice(rs.getInt("price"));
@@ -101,7 +101,7 @@ public class CarDAO implements ICarDAO {
 			for(Object[] row : rows) {
 				Car car = new Car();
 				car.setIdCar((Integer)row[0]);
-				car.setLicense_plate(row[1].toString());
+				car.setLicensePlate(row[1].toString());
 				car.setModel(row[2].toString());
 				car.setType(row[3].toString());
 				car.setPrice((Integer)row[4]);

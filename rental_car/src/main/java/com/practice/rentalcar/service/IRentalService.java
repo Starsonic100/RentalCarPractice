@@ -12,5 +12,5 @@ public interface IRentalService {
 	Rental getSeletedRental(int idRent);
 	List<Object> getActiveRents();
 	List<Object> getInactiveRents();
-	void updateRental(int idRent, String actionRental);
+	void updateRental(int idRent, int actionRental);
 }

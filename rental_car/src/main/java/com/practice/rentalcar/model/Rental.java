@@ -13,16 +13,16 @@ public class Rental {
 		
 	}
 
-	public Rental(String start_date, String end_date, int idCar, int idPerson) {
-		this.start_date = start_date;
-		this.end_date = end_date;
+	public Rental(String startDate, String endDate, int idCar, int idPerson) {
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.idCar = idCar;
 		this.idPerson = idPerson;
 	}
 	
-	public Rental(String start_date, String end_date, int idCar, int idPerson, int active) {
-		this.start_date = start_date;
-		this.end_date = end_date;
+	public Rental(String startDate, String endDate, int idCar, int idPerson, int active) {
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.idCar = idCar;
 		this.idPerson = idPerson;
 		this.active = active;
@@ -36,10 +36,10 @@ public class Rental {
 	private int idRent;
 	
 	@Column(name="start_date")
-	private String start_date;
+	private String startDate;
 	
 	@Column(name="end_date")
-	private String end_date;
+	private String endDate;
 	
 	@Column(name="idCars")
 	private int idCar;
@@ -64,16 +64,16 @@ public class Rental {
 		this.idRent = idRent;
 	}
 
-	public String getStart_date() {
-		return start_date;
+	public String getStartDate() {
+		return startDate;
 	}
 
-	public void setStart_date(String start_date) {
-		this.start_date = start_date;
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 
-	public String getEnd_date() {
-		return end_date;
+	public String getEndDate() {
+		return endDate;
 	}
 	
 	public int getActive() {
@@ -88,8 +88,8 @@ public class Rental {
 		return car;
 	}
 
-	public void setEnd_date(String end_date) {
-		this.end_date = end_date;
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	public int getIdCar() {
