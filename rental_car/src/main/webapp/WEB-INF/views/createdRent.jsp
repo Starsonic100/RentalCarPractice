@@ -22,7 +22,7 @@
 			<tr><td>Start Date</td><td> ${car.getStartDate()}</td></tr>
 			<tr><td>End Date</td><td> ${car.getEndDate()}</td></tr>
 			<tr><td>Model</td><td> ${car.getModel()}</td></tr>
-			<tr><td>License Plate</td><td> ${car.getLicense_plate()}</td></tr>
+			<tr><td>License Plate</td><td> ${car.getLicensePlate()}</td></tr>
 			<tr><td>Final Price</td><td> ${car.getPrice()}</td></tr>
 			</table>
 			<a href="../" class="btn btn-success">Finish and return to home</a>

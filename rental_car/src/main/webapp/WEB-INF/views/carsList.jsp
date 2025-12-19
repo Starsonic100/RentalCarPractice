@@ -31,7 +31,7 @@
 							<tr>
 							<td><form:radiobutton path="idCars" value="${carOption.getIdCars()}"/></td>
 							<td><c:out value="${carOption.getModel()}"/></td>
-							<td><c:out value="${carOption.getLicense_plate()}"/></td>
+							<td><c:out value="${carOption.getLicensePlate()}"/></td>
 							<td>$<c:out value="${carOption.getPrice()}"/></td>
 							</tr>
 						</c:forEach>

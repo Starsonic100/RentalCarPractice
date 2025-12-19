@@ -18,7 +18,7 @@
 <tr><td>Start Date: ${car.getStartDate()}</td></tr>
 <tr><td>End Date: ${car.getEndDate()}</td></tr>
 <tr><td>Model: ${car.getModel()}</td></tr>
-<tr><td>License Plate: ${car.getLicense_plate()}</td></tr>
+<tr><td>License Plate: ${car.getLicensePlate()}</td></tr>
 <tr><td>Final Price: ${car.getPrice()}</td></tr>
 </table>
 Do you wish to proceed with payment?

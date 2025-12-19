@@ -35,10 +35,10 @@
 					<tr>
 					<td><form:radiobutton path="idRent" value="${rentOption.getIdRent()}"/></td>
 					<td><c:out value="${rentOption.getCar().getModel()}"/></td>
-					<td><c:out value="${rentOption.getCar().getLicense_plate()}"/></td>
+					<td><c:out value="${rentOption.getCar().getLicensePlate()}"/></td>
 					<td><c:out value="${rentOption.getPerson().getName()}"/> <c:out value="${rentOption.getPerson().getSurname()}"/></td>
-					<td><c:out value="${rentOption.getStart_date()}"/></td>
-					<td><c:out value="${rentOption.getEnd_date()}"/></td>
+					<td><c:out value="${rentOption.getStartDate()}"/></td>
+					<td><c:out value="${rentOption.getEndDate()}"/></td>
 					</tr>
 				</c:forEach>
 			</table>

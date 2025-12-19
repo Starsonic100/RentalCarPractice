@@ -21,10 +21,10 @@
 				<div class="col-md-4">
 					<table class="table table-striped-columns">
 					<tr><td>Full name </td> <td>${person.getName()} ${person.getSurname()}</td></tr>
-					<tr><td>Start Date </td> <td>${selectedRental.getStart_date()}</td></tr>
-					<tr><td>End Date</td><td> ${selectedRental.getEnd_date()}</td></tr>
+					<tr><td>Start Date </td> <td>${selectedRental.getStartDate()}</td></tr>
+					<tr><td>End Date</td><td> ${selectedRental.getEndDate()}</td></tr>
 					<tr><td>Model</td><td> ${car.getModel()}</td></tr>
-					<tr><td>License Plate</td><td> ${car.getLicense_plate()}</td></tr>
+					<tr><td>License Plate</td><td> ${car.getLicensePlate()}</td></tr>
 					<tr><td>Final Price</td><td> ${car.getPrice()}</td></tr>
 					</table>
 				</div>
