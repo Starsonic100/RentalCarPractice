@@ -12,8 +12,9 @@
 	<jsp:include page="header.jsp" />
 </header>
 <body>
-	<form:form action="searchRent" modelAttribute="rental">
 	 <div class="container">
+
+	<form:form action="searchRent" modelAttribute="rental">
 		<div class="row">
 			<div class="col-md-4">
 			<form:label path="idRent" class="form-label">Insert the id of your rent:</form:label>
@@ -23,7 +24,8 @@
 			<input type="submit" value="Search" class="btn btn-primary"/>
             </div>
 		</div>
-	</div>
 	</form:form>
+		</div>
+	
 </body>
 </html>

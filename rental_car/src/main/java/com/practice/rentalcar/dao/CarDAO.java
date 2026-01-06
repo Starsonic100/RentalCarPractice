@@ -20,6 +20,12 @@ import com.practice.rentalcar.model.Rental;
 @Repository("carDAO")
 public class CarDAO implements ICarDAO {
 
+	private SessionFactory sessionFactory;
+	
+	@Autowired
+    public void setSessionFactory(SessionFactory sessionFactory){
+        this.sessionFactory=sessionFactory;
+    }//setSessionFactory
 
 	class CarMapper implements RowMapper<Car>{
 		@Override
@@ -42,16 +48,12 @@ public class CarDAO implements ICarDAO {
 		List<Car> carList = new ArrayList<>();
 		
 		String sql = "select c.idCars, c.license_plate, c.model, c.type, c.price from cars c";
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Car.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		try {
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Car.class);
 			mySession.beginTransaction();
 			carList = mySession.createQuery(sql).list();
 			mySession.getTransaction().commit();
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
+
 		return carList;
 
 	}
@@ -59,24 +61,20 @@ public class CarDAO implements ICarDAO {
 	@Override
 	public Car getSelectedCar(int idCar) {
 		Car selectedCar = new Car();
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Car.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		try {
-			mySession.beginTransaction();
-			selectedCar = (Car) mySession.createQuery("from cars where idCars="+idCar).uniqueResult();
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Car.class);
+		selectedCar = (Car) mySession.createQuery("from cars where id="+idCar).uniqueResult();
+		
 		return selectedCar;
 	}
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<Car> getFilteredCars(String startDate, String endDate, String type, int sortCars){
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addPackage("rentalcar.model")
-				.addAnnotatedClass(Car.class).addAnnotatedClass(Rental.class).addAnnotatedClass(Person.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Car.class);
+		mySession.createCriteria(Rental.class);
+		mySession.createCriteria(Person.class);
 		List<Car> carList = new ArrayList<>();
 		String order = null;
 		switch(sortCars) {
@@ -94,7 +92,6 @@ public class CarDAO implements ICarDAO {
 				+ " AND (r.end_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))) AND (r.idCars IS NULL OR r.active = 0) "
 				+ " AND type = '"+type+"'"
 				+" ORDER BY c.price "+order;
-		try {
 			mySession.beginTransaction();
 			List<Object[]> rows = mySession.createSQLQuery(sql).list();
 			mySession.getTransaction().commit();
@@ -108,10 +105,6 @@ public class CarDAO implements ICarDAO {
 				carList.add(car);
 			}
 
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
 		return carList;
 	}
 }

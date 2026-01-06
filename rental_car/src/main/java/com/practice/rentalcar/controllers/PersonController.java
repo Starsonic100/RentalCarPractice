@@ -27,8 +27,8 @@ import javax.validation.Valid;
 public class PersonController {
 	
 	private IPersonService personService;
-	@Autowired(required=true)
-	@Qualifier(value="personService")
+	@Autowired
+	@Qualifier("personService")
 	public void setPersonService(IPersonService ps) {
 		this.personService = ps;
 	}

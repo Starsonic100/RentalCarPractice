@@ -5,7 +5,16 @@
 	http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 
 	<display-name>rental_car</display-name>
+	<!-- Root context configuration for Spring -->
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:appContext.xml</param-value>
+	</context-param>
 	
+	<!-- Necessary to bootstrap the root context -->
+	<listener>
+	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

@@ -30,8 +30,8 @@ import com.practice.rentalcar.service.IRentalService;
 public class RentalController {
 	
 	private IRentalService rentalService;
-	@Autowired(required=true)
-	@Qualifier(value="rentalService")
+	@Autowired
+	@Qualifier("rentalService")
 	public void setRentalService(IRentalService rs) {
 		this.rentalService = rs;
 	}
@@ -80,7 +80,7 @@ public class RentalController {
 		else {
 			ModelAndView viewMap = new ModelAndView("viewRentalData");
 			Rental selectedRental = new Rental();
-			selectedRental = this.rentalService.getSeletedRental(selectedRental.getIdRent());
+			selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
 			if(selectedRental != null) {
 				Car car = this.carService.getSeletedCar(selectedRental.getIdCar());
 				Person person = this.personService.getSelectedPerson(selectedRental.getIdPerson());

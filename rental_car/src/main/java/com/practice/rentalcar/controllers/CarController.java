@@ -33,8 +33,8 @@ import com.practice.rentalcar.service.ICarService;
 public class CarController {
 	
 	private ICarService carService;
-	@Autowired(required=true)
-	@Qualifier(value="carService")
+	@Autowired
+	@Qualifier("carService") 
 	public void setCarService(ICarService cs) {
 		this.carService = cs;
 	}

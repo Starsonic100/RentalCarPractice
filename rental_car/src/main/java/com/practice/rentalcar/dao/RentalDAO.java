@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.practice.rentalcar.model.Car;
@@ -15,6 +16,14 @@ import com.practice.rentalcar.model.Rental;
 
 @Repository("rentalDAO")
 public class RentalDAO implements IRentalDAO {
+	
+	private SessionFactory sessionFactory;
+	
+	@Autowired
+    public void setSessionFactory(SessionFactory sessionFactory){
+        this.sessionFactory=sessionFactory;
+    }//setSessionFactory
+
 	@Override
 	public int addRental(Rental rental) {
 		int idRental;
@@ -23,49 +32,37 @@ public class RentalDAO implements IRentalDAO {
 		if(currentDate.toString().equals(rental.getStartDate())) {
 			active = 1;
 		}
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Rental.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		try {
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Rental.class);
 			Rental newRent = new Rental(rental.getStartDate(), rental.getEndDate(), rental.getIdCar(), rental.getIdPerson(), active);
-			mySession.beginTransaction();
-			mySession.persist(newRent);
-			mySession.getTransaction().commit();
+			mySession.save(newRent);
 			idRental = newRent.getIdRent();
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
+		
 		return idRental;
 	}
 	
 	@Override
 	public Rental getSelectedRental(int idRent) {
 		Rental selectedRental = new Rental();
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Rental.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		try {
-			mySession.beginTransaction();
-			selectedRental = (Rental) mySession.createQuery("from rent where idRent="+idRent).uniqueResult();
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Rental.class);	
+		System.out.println(idRent);		
+		selectedRental = (Rental) mySession.createQuery("from rent where idRent="+idRent).uniqueResult();
+
 		return selectedRental;
 	}
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<Object> getActiveRents(){
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addPackage("rentalcar.model").addAnnotatedClass(Rental.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		List<Object> activeRentalsList = new ArrayList<>();
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Rental.class);		List<Object> activeRentalsList = new ArrayList<>();
 		LocalDate currentDate = LocalDate.now();
 		
 		String sql = "select r.idRent, r.start_date, r.end_date, c.license_plate, c.model, p.name, p.surname from\r\n"
 				+ "rent r INNER JOIN cars c ON c.idCars = r.idCars\r\n"
 				+ "INNER JOIN person p ON p.idPerson = r.idPerson\r\n"
 				+ "where r.active = '1'";
-		try {
 			mySession.beginTransaction();
 			List<Object[]> rows = mySession.createSQLQuery(sql).list();
 			mySession.getTransaction().commit();
@@ -85,17 +82,14 @@ public class RentalDAO implements IRentalDAO {
 				activeRentalsList.add(rental);
 			}
 
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
+
 		return activeRentalsList;
 	}
 	
 	@Override
 	public List<Object> getInactiveRents(){
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addPackage("rentalcar.model").addAnnotatedClass(Rental.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Rental.class);
 		List<Object> inactiveRentalsList = new ArrayList<>();
 		LocalDate currentDate = LocalDate.now();
 		
@@ -103,7 +97,6 @@ public class RentalDAO implements IRentalDAO {
 				+ "rent r INNER JOIN cars c ON c.idCars = r.idCars\r\n"
 				+ "INNER JOIN person p ON p.idPerson = r.idPerson\r\n"
 				+ "where r.active = '0' AND (r.start_date <= '"+currentDate+"' OR r.start_date >= '"+currentDate+"') AND r.end_date > '"+currentDate+"'";
-		try {
 			mySession.beginTransaction();
 			List<Object[]> rows = mySession.createSQLQuery(sql).list();
 			mySession.getTransaction().commit();
@@ -122,30 +115,19 @@ public class RentalDAO implements IRentalDAO {
 				rental.getPerson().setSurname(row[6].toString());
 				inactiveRentalsList.add(rental);
 			}
-
-		}finally {
-			mySession.close();
-			myFactory.close();
-		}
 		return inactiveRentalsList;
 	}
 	
 	@Override
 	public void updateRental(int idRent, int actionRental) {
 		LocalDate currentDate = LocalDate.now();
-		SessionFactory myFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Rental.class).buildSessionFactory();
-		Session mySession = myFactory.openSession();
-		try {
+		Session mySession = sessionFactory.getCurrentSession();
+		mySession.createCriteria(Rental.class);	
 			mySession.beginTransaction();
 			Rental selectedRental = mySession.get(Rental.class, idRent);
 			selectedRental.setActive(actionRental);
 			if(actionRental == 1) selectedRental.setStartDate(currentDate.toString()); else selectedRental.setEndDate(currentDate.toString());
 			mySession.getTransaction().commit();
-		}
-		finally {
-			mySession.close();
-			myFactory.close();
-		}
 	}
 
 }

@@ -30,7 +30,7 @@
 					<form:errors path="endDate" class="text-danger"/>
 				</div>
 				<div class="col-md-4">
-		 			<form:label path="type"class="form-label">Type of Car</form:label>
+		 			<form:label path="type" class="form-label">Type of Car</form:label>
 						<form:select path="type" class="form-select" >
 						    <form:option value="-" label="--Please Select--"/>
 					        <form:option value="Economic" label="Economic"/>
@@ -41,9 +41,9 @@
 				</div>
 				</div>
 				<div class="row">
-			<form:label path="sortCars"class="form-label">Sort by price in:</form:label>
-				<form:radiobutton path="sortCars" value="0"/><form:label path="sortCars"class="form-check-label">Descendant Order</form:label>
-				<form:radiobutton path="sortCars" value="1"/><form:label path="sortCars"class="form-label">Ascendant Order</form:label>
+			<form:label path="sortCars" class="form-label">Sort by price in:</form:label>
+				<form:radiobutton path="sortCars" value="0"/><form:label path="sortCars" class="form-check-label">Descendant Order</form:label>
+				<form:radiobutton path="sortCars" value="1"/><form:label path="sortCars" class="form-label">Ascendant Order</form:label>
 			<input type="submit" value="Find" class="btn btn-primary"/>
 			</div>
 			</form:form>

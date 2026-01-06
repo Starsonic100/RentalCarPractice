@@ -2,6 +2,7 @@ package com.practice.rentalcar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.practice.rentalcar.dao.IPersonDAO;
 import com.practice.rentalcar.model.Person;
@@ -13,11 +14,13 @@ public class PersonService implements IPersonService {
 	private IPersonDAO personDAO;
 
 	@Override
+	@Transactional
 	public int addPerson(Person person) {
 		return personDAO.addPerson(person);
 	}
 	
 	@Override
+	@Transactional
 	public Person getSelectedPerson(int idPerson) {
 		return personDAO.getSelectedPerson(idPerson);
 	}
