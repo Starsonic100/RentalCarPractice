@@ -12,25 +12,40 @@
 	<jsp:include page="header.jsp" />
 </header>
 <body>
-<h1>Current data for rent</h1>
-<table>
-<tr><td>Full name: ${person.getName()}</td></tr>
-<tr><td>Start Date: ${car.getStartDate()}</td></tr>
-<tr><td>End Date: ${car.getEndDate()}</td></tr>
-<tr><td>Model: ${car.getModel()}</td></tr>
-<tr><td>License Plate: ${car.getLicensePlate()}</td></tr>
-<tr><td>Final Price: ${car.getPrice()}</td></tr>
-</table>
-Do you wish to proceed with payment?
+<div class="container">
+		<div class="row">
+			<h5>Current data for rent</h5>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<table class="table table-striped">
+					<tr><td>Full name: ${person.getName()}</td></tr>
+						<tr><td>Start Date: ${car.getStartDate()}</td></tr>
+						<tr><td>End Date: ${car.getEndDate()}</td></tr>
+						<tr><td>Model: ${car.getModel()}</td></tr>
+						<tr><td>License Plate: ${car.getLicensePlate()}</td></tr>
+						<tr><td>Final Price: ${car.getPrice()}</td></tr>
+				</table>
+			</div>
+			</div>
+		<div class="row">
+			<h6>Do you wish to proceed with payment?</h6>
+		</div>
+			<div class="row">
+				<div class="col-md-2">
+	
 <form:form action="submitDateForm" modelAttribute="car">
-<table>
-	<tr><td><input type="submit" name="cancel" value="Return"/></td></tr>
-</table>
+				<input type="submit" name="cancel" value="Return"  class="btn btn-secondary"/>
 </form:form>
+			</div>
+			<div class="col-md-2">
+
 <form:form action="../rental/createRent" modelAttribute="car">
-<table>
-	<tr><td><input type="submit" name="submit" value="Pay"/></td></tr>
-</table>
+			<input type="submit" name="submit" value="Pay" class="btn btn-success"/>
 </form:form>
+			</div>
+
+</div>
+</div>
 </body>
 </html>

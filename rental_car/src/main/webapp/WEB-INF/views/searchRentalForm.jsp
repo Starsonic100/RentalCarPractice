@@ -14,7 +14,7 @@
 <body>
 	 <div class="container">
 
-	<form:form action="searchRent" modelAttribute="rental">
+	<form:form action="searchRent" modelAttribute="rental" method="GET">
 		<div class="row">
 			<div class="col-md-4">
 			<form:label path="idRent" class="form-label">Insert the id of your rent:</form:label>

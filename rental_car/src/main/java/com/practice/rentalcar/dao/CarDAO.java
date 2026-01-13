@@ -5,9 +5,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -45,15 +49,8 @@ public class CarDAO implements ICarDAO {
 	
 	@Override
 	public List<Car> getAllCars(){
-		List<Car> carList = new ArrayList<>();
-		
-		String sql = "select c.idCars, c.license_plate, c.model, c.type, c.price from cars c";
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Car.class);
-			mySession.beginTransaction();
-			carList = mySession.createQuery(sql).list();
-			mySession.getTransaction().commit();
-
+		List<Car> carList = mySession.createCriteria(Car.class).list();
 		return carList;
 
 	}
@@ -62,48 +59,35 @@ public class CarDAO implements ICarDAO {
 	public Car getSelectedCar(int idCar) {
 		Car selectedCar = new Car();
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Car.class);
-		selectedCar = (Car) mySession.createQuery("from cars where id="+idCar).uniqueResult();
-		
+		selectedCar = (Car) mySession.createCriteria(Car.class).add(Restrictions.like("id", idCar)).uniqueResult();
 		return selectedCar;
 	}
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public List<Car> getFilteredCars(String startDate, String endDate, String type, int sortCars){
+	public List<Car> getFilteredCars(String startDate, String endDate, String type, String sortCars){
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Car.class);
-		mySession.createCriteria(Rental.class);
-		mySession.createCriteria(Person.class);
-		List<Car> carList = new ArrayList<>();
-		String order = null;
-		switch(sortCars) {
-			case 1:
-				order = "ASC";
-				break;
-			case 0:
-				order = "DESC";
-				break;
-		}
-		
-		String sql = "select c.idCars, c.license_plate, c.model, c.type, c.price from cars c"
-				+ " LEFT JOIN rent r ON c.idCars = r.idCars"
-				+ " where ((r.start_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))"
-				+ " AND (r.end_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))) AND (r.idCars IS NULL OR r.active = 0) "
-				+ " AND type = '"+type+"'"
-				+" ORDER BY c.price "+order;
-			mySession.beginTransaction();
-			List<Object[]> rows = mySession.createSQLQuery(sql).list();
-			mySession.getTransaction().commit();
-			for(Object[] row : rows) {
-				Car car = new Car();
-				car.setIdCar((Integer)row[0]);
-				car.setLicensePlate(row[1].toString());
-				car.setModel(row[2].toString());
-				car.setType(row[3].toString());
-				car.setPrice((Integer)row[4]);
-				carList.add(car);
-			}
+		String querySelect = "select distinct c from cars c LEFT JOIN rent r ON c.id = r.idCar where ((r.startDate NOT BETWEEN :startDate AND :endDate ) AND (r.endDate NOT BETWEEN :startDate AND :endDate )) AND (r.idCar IS NULL OR r.active = 0) AND c.type = :type ORDER BY c.price ";
+		Query query = mySession.createQuery(querySelect+sortCars);
+		query.setString("startDate", startDate.toString());
+		query.setString("endDate", endDate.toString());
+		query.setString("type", type);
+
+		//		String sql = "select c.idCars, c.license_plate, c.model, c.type, c.price from cars c"
+//				+ " LEFT JOIN rent r ON c.idCars = r.idCars"
+//				+ " where ((r.start_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))"
+//				+ " AND (r.end_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))) AND (r.idCars IS NULL OR r.active = 0) "
+//				+ " AND type = '"+type+"'"
+//				+" ORDER BY c.price "+order;
+		List<Car> carList =query.getResultList();
+//		List<Car> carList = new ArrayList<>();
+//
+//			List<Object[]> rows =query.list();
+//			for(Object[] row : rows) {
+//				System.out.println("Prueba: "+row[0]);
+//				Car car = (Car) row[0];
+//				carList.add(car);
+//			}
 
 		return carList;
 	}

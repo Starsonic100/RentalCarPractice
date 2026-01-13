@@ -42,8 +42,8 @@
 				</div>
 				<div class="row">
 			<form:label path="sortCars" class="form-label">Sort by price in:</form:label>
-				<form:radiobutton path="sortCars" value="0"/><form:label path="sortCars" class="form-check-label">Descendant Order</form:label>
-				<form:radiobutton path="sortCars" value="1"/><form:label path="sortCars" class="form-label">Ascendant Order</form:label>
+				<form:radiobutton path="sortCars" value="desc"/><form:label path="sortCars" class="form-check-label">Descendant Order</form:label>
+				<form:radiobutton path="sortCars" value="asc"/><form:label path="sortCars" class="form-label">Ascendant Order</form:label>
 			<input type="submit" value="Find" class="btn btn-primary"/>
 			</div>
 			</form:form>

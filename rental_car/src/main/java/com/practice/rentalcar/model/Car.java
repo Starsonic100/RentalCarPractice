@@ -21,6 +21,14 @@ public class Car {
 		this.price = price;
 		this.available = available;
 	}
+	
+	public Car(int idCar, String licensePlate, String model, String type, int price) {
+		this.idCar = idCar;
+		this.licensePlate = licensePlate;
+		this.model = model;
+		this.type = type;
+		this.price = price;
+	}
 
 	public Car(int idCar) {
 		this.idCar = idCar;
@@ -61,7 +69,7 @@ public class Car {
 	private String endDate;
 	
 	@Transient
-	private int sortCars;
+	private String sortCars;
 
 	public int getIdCar() {
 		return idCar;
@@ -127,11 +135,11 @@ public class Car {
 		this.endDate = endDate;
 	}
 
-	public int getSortCars() {
+	public String getSortCars() {
 		return sortCars;
 	}
 
-	public void setSortCars(int sortCars) {
+	public void setSortCars(String sortCars) {
 		this.sortCars = sortCars;
 	}
 }

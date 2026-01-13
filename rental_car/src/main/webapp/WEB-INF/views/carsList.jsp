@@ -29,7 +29,7 @@
 						</tr>
 						<c:forEach  items="${cars}" var="carOption">
 							<tr>
-							<td><form:radiobutton path="idCars" value="${carOption.getIdCars()}"/></td>
+							<td><form:radiobutton path="idCar" value="${carOption.getIdCar()}"/></td>
 							<td><c:out value="${carOption.getModel()}"/></td>
 							<td><c:out value="${carOption.getLicensePlate()}"/></td>
 							<td>$<c:out value="${carOption.getPrice()}"/></td>
@@ -37,7 +37,7 @@
 						</c:forEach>
 					</table>
 					</div>
-					<form:errors path="idCars" class="text-danger"/>
+					<form:errors path="idCar" class="text-danger"/>
 					<br>
 					<input type="submit" name="cancel" value="Return to previous page" class="btn btn-secondary"/>
 					<input type="submit" name="submit" value="Rent Car" class="btn btn-primary"/>

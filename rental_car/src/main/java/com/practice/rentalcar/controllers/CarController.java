@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -40,7 +42,7 @@ public class CarController {
 	}
 	
 	
-	@RequestMapping("/submitDateForm")
+	@PostMapping("/submitDateForm")
 	public ModelAndView submitDateForm(@ModelAttribute("car") @Validated(ValidateDatesForm.class) Car car, BindingResult result, @ModelAttribute("person") Person person) {
 		if(result.hasErrors()) {
 			ModelAndView viewMap = new ModelAndView("datesForm");
@@ -48,6 +50,7 @@ public class CarController {
 		}
 		else {
 		List<Car> cars = this.carService.getFilteredCars(car.getStartDate(), car.getEndDate(), car.getType(), car.getSortCars());
+		cars.get(0).getIdCar();
 		ModelAndView viewMap = new ModelAndView("carsList");
 		viewMap.addObject("cars", cars);
 		return viewMap;
@@ -55,7 +58,7 @@ public class CarController {
 	}
 	
 	
-	@RequestMapping(value="/selectCar", params="submit")
+	@PostMapping(value="/selectCar", params="submit")
 	public ModelAndView selectedCar(@ModelAttribute("car") @Validated({ValidateDatesForm.class, ValidateSelectCar.class}) Car car, BindingResult result, @ModelAttribute("person") Person person, Model model) {
 		if(result.hasErrors()) {
 			List<Car> cars = this.carService.getFilteredCars(car.getStartDate(), car.getEndDate(), car.getType(), car.getSortCars());
@@ -77,7 +80,7 @@ public class CarController {
 		}
 	}
 	
-	@RequestMapping(value="/selectCar", params="cancel")
+	@GetMapping(value="/selectCar", params="cancel")
 	public String returnDateForm(Model model,  @ModelAttribute("person") Person person) {
 		Car car = new Car();
 		model.addAttribute("car", car);

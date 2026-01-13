@@ -50,6 +50,7 @@ public class Rental {
 	@Column(name="active")
 	private int active;
 	
+	
 	@Transient
 	private Person person;
 	

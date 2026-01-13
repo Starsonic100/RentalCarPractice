@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -46,8 +48,7 @@ public class RentalDAO implements IRentalDAO {
 		Rental selectedRental = new Rental();
 		Session mySession = sessionFactory.getCurrentSession();
 		mySession.createCriteria(Rental.class);	
-		System.out.println(idRent);		
-		selectedRental = (Rental) mySession.createQuery("from rent where idRent="+idRent).uniqueResult();
+		selectedRental = (Rental) mySession.createCriteria(Rental.class).add(Restrictions.like("idRent", idRent)).uniqueResult();
 
 		return selectedRental;
 	}
@@ -56,63 +57,42 @@ public class RentalDAO implements IRentalDAO {
 	@Override
 	public List<Object> getActiveRents(){
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Rental.class);		List<Object> activeRentalsList = new ArrayList<>();
-		LocalDate currentDate = LocalDate.now();
-		
-		String sql = "select r.idRent, r.start_date, r.end_date, c.license_plate, c.model, p.name, p.surname from\r\n"
-				+ "rent r INNER JOIN cars c ON c.idCars = r.idCars\r\n"
-				+ "INNER JOIN person p ON p.idPerson = r.idPerson\r\n"
-				+ "where r.active = '1'";
-			mySession.beginTransaction();
-			List<Object[]> rows = mySession.createSQLQuery(sql).list();
-			mySession.getTransaction().commit();
+		List<Object> activeRentalsList = new ArrayList<>();
+		Query query = mySession.createQuery("from rent r, cars c, person p where r.active = '1' AND r.idCar = c.id AND r.idPerson = p.id");
+			List<Object[]> rows = query.list();
 			for(Object[] row : rows) {
-				Rental rental = new Rental();
-				Car car = new Car();
-				Person person = new Person();
+				Rental rental = (Rental) row[0];
+				Car car = (Car) row[1];
+				Person person = (Person) row[2];
 				rental.setCar(car);
 				rental.setPerson(person);
-				rental.setIdRent((Integer)row[0]);
-				rental.setStartDate(row[1].toString());
-				rental.setEndDate(row[2].toString());
-				rental.getCar().setLicensePlate(row[3].toString());
-				rental.getCar().setModel(row[4].toString());
-				rental.getPerson().setName(row[5].toString());
-				rental.getPerson().setSurname(row[6].toString());
+				rental.getCar().setLicensePlate(car.getLicensePlate());
+				rental.getCar().setModel(car.getModel());
+				rental.getPerson().setName(person.getName());
+				rental.getPerson().setSurname(person.getSurname());
 				activeRentalsList.add(rental);
 			}
-
-
 		return activeRentalsList;
 	}
 	
 	@Override
 	public List<Object> getInactiveRents(){
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Rental.class);
 		List<Object> inactiveRentalsList = new ArrayList<>();
 		LocalDate currentDate = LocalDate.now();
-		
-		String sql = "select r.idRent, r.start_date, r.end_date, c.license_plate, c.model, p.name, p.surname from\r\n"
-				+ "rent r INNER JOIN cars c ON c.idCars = r.idCars\r\n"
-				+ "INNER JOIN person p ON p.idPerson = r.idPerson\r\n"
-				+ "where r.active = '0' AND (r.start_date <= '"+currentDate+"' OR r.start_date >= '"+currentDate+"') AND r.end_date > '"+currentDate+"'";
-			mySession.beginTransaction();
-			List<Object[]> rows = mySession.createSQLQuery(sql).list();
-			mySession.getTransaction().commit();
+		Query query = mySession.createQuery("from rent r, cars c, person p where r.active = '0' AND (r.startDate <= :currentDate OR r.startDate >= :currentDate) AND r.endDate > :currentDate  AND r.idCar = c.id AND r.idPerson = p.id");
+		query.setString("currentDate", currentDate.toString());
+			List<Object[]> rows = query.list();
 			for(Object[] row : rows) {
-				Rental rental = new Rental();
-				Car car = new Car();
-				Person person = new Person();
+				Rental rental = (Rental) row[0];
+				Car car = (Car) row[1];
+				Person person = (Person) row[2];
 				rental.setCar(car);
 				rental.setPerson(person);
-				rental.setIdRent((Integer)row[0]);
-				rental.setStartDate(row[1].toString());
-				rental.setEndDate(row[2].toString());
-				rental.getCar().setLicensePlate(row[3].toString());
-				rental.getCar().setModel(row[4].toString());
-				rental.getPerson().setName(row[5].toString());
-				rental.getPerson().setSurname(row[6].toString());
+				rental.getCar().setLicensePlate(car.getLicensePlate());
+				rental.getCar().setModel(car.getModel());
+				rental.getPerson().setName(person.getName());
+				rental.getPerson().setSurname(person.getSurname());
 				inactiveRentalsList.add(rental);
 			}
 		return inactiveRentalsList;
@@ -122,12 +102,10 @@ public class RentalDAO implements IRentalDAO {
 	public void updateRental(int idRent, int actionRental) {
 		LocalDate currentDate = LocalDate.now();
 		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Rental.class);	
-			mySession.beginTransaction();
-			Rental selectedRental = mySession.get(Rental.class, idRent);
-			selectedRental.setActive(actionRental);
-			if(actionRental == 1) selectedRental.setStartDate(currentDate.toString()); else selectedRental.setEndDate(currentDate.toString());
-			mySession.getTransaction().commit();
+		Rental selectedRental = mySession.get(Rental.class, idRent);
+		selectedRental.setActive(actionRental);
+		if(actionRental == 1) selectedRental.setStartDate(currentDate.toString()); else selectedRental.setEndDate(currentDate.toString());
+		mySession.saveOrUpdate(selectedRental);
 	}
 
 }

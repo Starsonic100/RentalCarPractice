@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,7 +53,7 @@ public class RentalController {
 		this.carService = cs;
 	}
 
-	@RequestMapping("/createRent")
+	@PostMapping("/createRent")
 	public String createRent(@ModelAttribute("person") Person person, @ModelAttribute("car") Car car, Model model) {
 		Rental rental = new Rental();
 		rental.setStartDate(car.getStartDate());
@@ -58,20 +61,19 @@ public class RentalController {
 		rental.setIdCar(car.getIdCar());
 		rental.setIdPerson(person.getId());
 		rental.setIdRent(this.rentalService.addRental(rental));
-		System.out.println(rental.getIdRent());
 		model.addAttribute("rental", rental);
 		return "createdRent";
 	}
 	
 	
-	@RequestMapping("/searchRentalForm")
+	@GetMapping("/searchRentalForm")
 	public String searchRentalForm(Model model) {
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
 		return "searchRentalForm";
 	}
 	
-	@RequestMapping("/searchRent")
+	@GetMapping("/searchRent")
 	public ModelAndView viewRentalData(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			ModelAndView viewMap = new ModelAndView("searchRentalForm");
@@ -92,7 +94,7 @@ public class RentalController {
 		}
 	}
 	
-	@RequestMapping("/activeRents")
+	@GetMapping("/activeRents")
 	public ModelAndView viewActiveRents(Model model) {
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
@@ -102,7 +104,7 @@ public class RentalController {
 		return viewMap;	
 	}
 	
-	@RequestMapping(value="/selectRent", params="submit")
+	@PostMapping(value="/selectRent", params="submit")
 	public ModelAndView selectedCar(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			Rental rentals = new Rental();
@@ -119,12 +121,12 @@ public class RentalController {
 		}
 	}
 	
-	@RequestMapping(value={"/selectRent","/selectInactiveRent"}, params="cancel")
+	@GetMapping(value={"/selectRent","/selectInactiveRent"}, params="cancel")
 	public String returnHome(Model model) {
 		return "home";
 	}
 	
-	@RequestMapping("/inactiveRents")
+	@GetMapping("/inactiveRents")
 	public ModelAndView viewInactiveRents(Model model) {
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
@@ -134,7 +136,7 @@ public class RentalController {
 		return viewMap;	
 	}
 	
-	@RequestMapping(value="/selectInactiveRent", params="submit")
+	@PostMapping(value="/selectInactiveRent", params="submit")
 	public ModelAndView selectedInactiveRent(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			Rental rentals = new Rental();

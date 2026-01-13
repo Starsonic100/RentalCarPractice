@@ -26,7 +26,7 @@ public class CarService implements ICarService {
 	
 	@Override
 	@Transactional
-	public List<Car> getFilteredCars(String startDate, String endDate, String type, int sortCars){
+	public List<Car> getFilteredCars(String startDate, String endDate, String type, String sortCars){
 		List<Car> cars = carDAO.getFilteredCars(startDate, endDate, type, sortCars);
 		return cars;
 	}
