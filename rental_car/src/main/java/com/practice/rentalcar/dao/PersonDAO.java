@@ -24,20 +24,15 @@ public class PersonDAO implements IPersonDAO {
 
 	@Override
 	public int addPerson(Person person) {
-		int idPerson;
-		Session mySession = sessionFactory.getCurrentSession();
-			Person newPerson = new Person(person.getName(),person.getSurname(),person.getEmail(),person.getAddress(),2);
-			mySession.save(newPerson);
-			idPerson = newPerson.getId();
-		return idPerson;
+		Session session = sessionFactory.getCurrentSession();
+		Person newPerson = new Person(person.getName(),person.getSurname(),person.getEmail(),person.getAddress(),2);
+		session.save(newPerson);
+		return newPerson.getId();
 	}
 	
 	@Override
 	public Person getSelectedPerson(int idPerson) {
-			Person selectedPerson = new Person();
-			Session mySession = sessionFactory.getCurrentSession();
-			selectedPerson = (Person) mySession.createCriteria(Person.class).add(Restrictions.like("id", idPerson)).uniqueResult();
-
-			return selectedPerson;
+		Session session = sessionFactory.getCurrentSession();
+		return session.get(Person.class, idPerson);
 	}
 }

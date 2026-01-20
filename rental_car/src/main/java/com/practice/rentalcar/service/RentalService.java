@@ -1,5 +1,6 @@
 package com.practice.rentalcar.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,35 +19,41 @@ public class RentalService implements IRentalService {
 	@Override
 	@Transactional
 	public int addRental(Rental rental) {
+		int active = 0;
+		LocalDate currentDate = LocalDate.now();
+		if(currentDate.toString().equals(rental.getStartDate())) {
+			active = 1;
+		}
+		rental.setActive(active);
 		return rentalDAO.addRental(rental);
 	}
 	
 	@Override
 	@Transactional
 	public Rental getSeletedRental(int idRent) {
-		Rental selectedRental = rentalDAO.getSelectedRental(idRent);
-		return selectedRental;
+		return rentalDAO.getSelectedRental(idRent);
 	} 
 	
 	@Override
 	@Transactional
 	public List<Object> getActiveRents(){
-		List<Object> rents = rentalDAO.getActiveRents();
-		return rents;
+		return rentalDAO.getActiveRents();
 	}
 	
 	@Override
 	@Transactional
 	public List<Object> getInactiveRents(){
-		List<Object> rents = rentalDAO.getInactiveRents();
-		return rents;
+		return rentalDAO.getInactiveRents();
 	}
 	
 	
 	@Override
 	@Transactional
-	public void updateRental(int idRent, int actionRental) {
-		rentalDAO.updateRental(idRent, actionRental);
+	public void updateRental(Rental rental, int actionRental) {
+		LocalDate currentDate = LocalDate.now();
+		rental.setActive(actionRental);
+		if(actionRental == 1) rental.setStartDate(currentDate.toString()); else rental.setEndDate(currentDate.toString());
+		rentalDAO.updateRental(rental);
 	}
 
 }

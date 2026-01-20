@@ -84,10 +84,8 @@ public class RentalController {
 			Rental selectedRental = new Rental();
 			selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
 			if(selectedRental != null) {
-				Car car = this.carService.getSeletedCar(selectedRental.getIdCar());
-				Person person = this.personService.getSelectedPerson(selectedRental.getIdPerson());
-				viewMap.addObject("car", car);
-				viewMap.addObject("person", person);
+				viewMap.addObject("car", this.carService.getSeletedCar(selectedRental.getIdCar()));
+				viewMap.addObject("person", this.personService.getSelectedPerson(selectedRental.getIdPerson()));
 			}
 			viewMap.addObject("selectedRental",selectedRental);
 			return viewMap;
@@ -105,17 +103,17 @@ public class RentalController {
 	}
 	
 	@PostMapping(value="/selectRent", params="submit")
-	public ModelAndView selectedCar(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
+	public ModelAndView selectedActiveRent(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			Rental rentals = new Rental();
 			model.addAttribute("rental", rentals);
-			List<Object> rents = this.rentalService.getInactiveRents();
+			List<Object> rents = this.rentalService.getActiveRents();
 			ModelAndView viewMap = new ModelAndView("viewActiveRentsList");
 			viewMap.addObject("rents", rents);
 			return viewMap;	
 		}
 		else {
-			this.rentalService.updateRental(rental.getIdRent(), 0);
+			this.rentalService.updateRental(rental,0);
 			ModelAndView viewMap = new ModelAndView("carReturnMessage");
 			return viewMap;
 		}
@@ -147,7 +145,7 @@ public class RentalController {
 			return viewMap;	
 		}
 		else {
-			this.rentalService.updateRental(rental.getIdRent(), 1);
+			this.rentalService.updateRental(rental,1);
 			ModelAndView viewMap = new ModelAndView("rentInactiveMessage");
 			return viewMap;
 		}

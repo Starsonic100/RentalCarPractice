@@ -16,5 +16,5 @@ public interface IRentalDAO {
 	
 	List<Object> getInactiveRents();
 	
-	void updateRental(int idRent, int actionRental);
+	void updateRental(Rental rental);
 }

@@ -28,37 +28,23 @@ public class RentalDAO implements IRentalDAO {
 
 	@Override
 	public int addRental(Rental rental) {
-		int idRental;
-		int active = 0;
-		LocalDate currentDate = LocalDate.now();
-		if(currentDate.toString().equals(rental.getStartDate())) {
-			active = 1;
-		}
-		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Rental.class);
-			Rental newRent = new Rental(rental.getStartDate(), rental.getEndDate(), rental.getIdCar(), rental.getIdPerson(), active);
-			mySession.save(newRent);
-			idRental = newRent.getIdRent();
-		
-		return idRental;
+		Session session = sessionFactory.getCurrentSession();
+		Rental newRent = new Rental(rental.getStartDate(), rental.getEndDate(), rental.getIdCar(), rental.getIdPerson(), rental.getActive());
+		session.save(newRent);
+		return newRent.getIdRent();		
 	}
 	
 	@Override
 	public Rental getSelectedRental(int idRent) {
-		Rental selectedRental = new Rental();
-		Session mySession = sessionFactory.getCurrentSession();
-		mySession.createCriteria(Rental.class);	
-		selectedRental = (Rental) mySession.createCriteria(Rental.class).add(Restrictions.like("idRent", idRent)).uniqueResult();
-
-		return selectedRental;
+		Session session = sessionFactory.getCurrentSession();
+		return session.get(Rental.class, idRent);
 	}
 	
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	@Override
+
 	public List<Object> getActiveRents(){
-		Session mySession = sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		List<Object> activeRentalsList = new ArrayList<>();
-		Query query = mySession.createQuery("from rent r, cars c, person p where r.active = '1' AND r.idCar = c.id AND r.idPerson = p.id");
+		Query query = session.createQuery("from rent r, cars c, person p where r.active = '1' AND r.idCar = c.id AND r.idPerson = p.id");
 			List<Object[]> rows = query.list();
 			for(Object[] row : rows) {
 				Rental rental = (Rental) row[0];
@@ -77,10 +63,10 @@ public class RentalDAO implements IRentalDAO {
 	
 	@Override
 	public List<Object> getInactiveRents(){
-		Session mySession = sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		List<Object> inactiveRentalsList = new ArrayList<>();
 		LocalDate currentDate = LocalDate.now();
-		Query query = mySession.createQuery("from rent r, cars c, person p where r.active = '0' AND (r.startDate <= :currentDate OR r.startDate >= :currentDate) AND r.endDate > :currentDate  AND r.idCar = c.id AND r.idPerson = p.id");
+		Query query = session.createQuery("from rent r, cars c, person p where r.active = '0' AND (r.startDate <= :currentDate OR r.startDate >= :currentDate) AND r.endDate > :currentDate  AND r.idCar = c.id AND r.idPerson = p.id");
 		query.setString("currentDate", currentDate.toString());
 			List<Object[]> rows = query.list();
 			for(Object[] row : rows) {
@@ -99,13 +85,9 @@ public class RentalDAO implements IRentalDAO {
 	}
 	
 	@Override
-	public void updateRental(int idRent, int actionRental) {
-		LocalDate currentDate = LocalDate.now();
-		Session mySession = sessionFactory.getCurrentSession();
-		Rental selectedRental = mySession.get(Rental.class, idRent);
-		selectedRental.setActive(actionRental);
-		if(actionRental == 1) selectedRental.setStartDate(currentDate.toString()); else selectedRental.setEndDate(currentDate.toString());
-		mySession.saveOrUpdate(selectedRental);
+	public void updateRental(Rental rental) {
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(rental);
 	}
 
 }

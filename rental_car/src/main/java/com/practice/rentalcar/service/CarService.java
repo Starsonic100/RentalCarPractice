@@ -17,25 +17,17 @@ public class CarService implements ICarService {
 	@Autowired
 	private ICarDAO carDAO;
 	
-	@Override
-	@Transactional
-	public List<Car> getAllCars(){
-		List<Car> cars = carDAO.getAllCars();
-		return cars;
-	}
 	
 	@Override
 	@Transactional
 	public List<Car> getFilteredCars(String startDate, String endDate, String type, String sortCars){
-		List<Car> cars = carDAO.getFilteredCars(startDate, endDate, type, sortCars);
-		return cars;
+		return carDAO.getFilteredCars(startDate, endDate, type, sortCars);
 	}
 	
 	@Override
 	@Transactional
 	public Car getSeletedCar(int idCar) {
-		Car selectedCar = carDAO.getSelectedCar(idCar);
-		return selectedCar;
+		return carDAO.getSelectedCar(idCar);
 	}
 
 }

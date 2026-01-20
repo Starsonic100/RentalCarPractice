@@ -34,7 +34,6 @@ public class CarDAO implements ICarDAO {
 	class CarMapper implements RowMapper<Car>{
 		@Override
 		public Car mapRow(ResultSet rs, int rowNum) throws SQLException{
-				// TODO Auto-generated method stub
 				Car car = new Car();
 				car.setIdCar(rs.getInt("idCars"));
 				car.setLicensePlate(rs.getString("license_plate"));
@@ -48,47 +47,19 @@ public class CarDAO implements ICarDAO {
 
 	
 	@Override
-	public List<Car> getAllCars(){
-		Session mySession = sessionFactory.getCurrentSession();
-		List<Car> carList = mySession.createCriteria(Car.class).list();
-		return carList;
-
-	}
-	
-	@Override
 	public Car getSelectedCar(int idCar) {
-		Car selectedCar = new Car();
-		Session mySession = sessionFactory.getCurrentSession();
-		selectedCar = (Car) mySession.createCriteria(Car.class).add(Restrictions.like("id", idCar)).uniqueResult();
-		return selectedCar;
+		Session session = sessionFactory.getCurrentSession();
+		return session.get(Car.class, idCar);
 	}
 	
-	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<Car> getFilteredCars(String startDate, String endDate, String type, String sortCars){
-		Session mySession = sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		String querySelect = "select distinct c from cars c LEFT JOIN rent r ON c.id = r.idCar where ((r.startDate NOT BETWEEN :startDate AND :endDate ) AND (r.endDate NOT BETWEEN :startDate AND :endDate )) AND (r.idCar IS NULL OR r.active = 0) AND c.type = :type ORDER BY c.price ";
-		Query query = mySession.createQuery(querySelect+sortCars);
+		Query query = session.createQuery(querySelect+sortCars);
 		query.setString("startDate", startDate.toString());
 		query.setString("endDate", endDate.toString());
 		query.setString("type", type);
-
-		//		String sql = "select c.idCars, c.license_plate, c.model, c.type, c.price from cars c"
-//				+ " LEFT JOIN rent r ON c.idCars = r.idCars"
-//				+ " where ((r.start_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))"
-//				+ " AND (r.end_date NOT BETWEEN CAST('"+startDate+"' AS DATE) AND CAST('"+endDate+"' AS DATE))) AND (r.idCars IS NULL OR r.active = 0) "
-//				+ " AND type = '"+type+"'"
-//				+" ORDER BY c.price "+order;
-		List<Car> carList =query.getResultList();
-//		List<Car> carList = new ArrayList<>();
-//
-//			List<Object[]> rows =query.list();
-//			for(Object[] row : rows) {
-//				System.out.println("Prueba: "+row[0]);
-//				Car car = (Car) row[0];
-//				carList.add(car);
-//			}
-
-		return carList;
+		return query.getResultList();
 	}
 }
