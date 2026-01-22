@@ -10,7 +10,7 @@ public interface IRentalService {
 
 	int addRental(Rental rental);
 	Rental getSeletedRental(int idRent);
-	List<Object> getActiveRents();
-	List<Object> getInactiveRents();
+	List<Rental> getActiveRents();
+	List<Rental> getInactiveRents();
 	void updateRental(Rental rental, int actionRental);
 }

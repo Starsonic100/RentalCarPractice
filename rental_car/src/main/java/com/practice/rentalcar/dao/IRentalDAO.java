@@ -12,9 +12,9 @@ public interface IRentalDAO {
 	
 	Rental getSelectedRental(int idRent);
 
-	List<Object> getActiveRents();
+	List<Rental> getActiveRents();
 	
-	List<Object> getInactiveRents();
+	List<Rental> getInactiveRents();
 	
 	void updateRental(Rental rental);
 }

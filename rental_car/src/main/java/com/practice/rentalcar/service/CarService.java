@@ -1,5 +1,6 @@
 package com.practice.rentalcar.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +21,11 @@ public class CarService implements ICarService {
 	
 	@Override
 	@Transactional
-	public List<Car> getFilteredCars(String startDate, String endDate, String type, String sortCars){
-		return carDAO.getFilteredCars(startDate, endDate, type, sortCars);
+	public List<Car> getFilteredCars(LocalDate startDate, LocalDate endDate, String type, String sortCars){
+		if(sortCars.equals("ASC")) {
+			return carDAO.getFilteredCars(startDate, endDate, type, "GET_FILTERED_CARS_ASC");
+		}
+		return carDAO.getFilteredCars(startDate, endDate, type, "GET_FILTERED_CARS_DESC");
 	}
 	
 	@Override

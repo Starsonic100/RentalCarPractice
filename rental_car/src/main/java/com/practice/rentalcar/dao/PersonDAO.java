@@ -3,7 +3,6 @@ package com.practice.rentalcar.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +24,8 @@ public class PersonDAO implements IPersonDAO {
 	@Override
 	public int addPerson(Person person) {
 		Session session = sessionFactory.getCurrentSession();
-		Person newPerson = new Person(person.getName(),person.getSurname(),person.getEmail(),person.getAddress(),2);
-		session.save(newPerson);
-		return newPerson.getId();
+		session.save(person);
+		return person.getId();
 	}
 	
 	@Override

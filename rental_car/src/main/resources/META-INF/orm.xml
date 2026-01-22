@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+    http://java.sun.com/xml/ns/persistence/orm_2_0.xsd ">
+	<named-query name="GET_ACTIVE_RENTS">
+		<query>
+		<![CDATA[
+				from rent r JOIN FETCH r.car JOIN FETCH r.person where r.active = '1'
+				]]>
+		</query>
+	</named-query>
+	<named-query name="GET_INACTIVE_RENTS">
+		<query>
+		<![CDATA[
+				from rent r JOIN FETCH r.car JOIN FETCH r.person where r.active = '0' 
+				AND (r.startDate <= :currentDate OR r.startDate >= :currentDate)
+				 AND r.endDate > :currentDate		
+				 
+		]]>
+		 </query>
+	</named-query>
+	<named-query name="GET_FILTERED_CARS_ASC">
+		<query>
+		<![CDATA[
+				select distinct c from cars c LEFT JOIN rent r ON c.id = r.car.id
+				where ((r.startDate NOT BETWEEN :startDate AND :endDate ) 
+				AND (r.endDate NOT BETWEEN :startDate AND :endDate ))
+				AND (r.car.id IS NULL OR r.active = 0) AND c.type = :type ORDER BY c.price ASC
+		]]>
+		</query>
+	</named-query>
+		<named-query name="GET_FILTERED_CARS_DESC">
+		<query>
+		<![CDATA[
+				select distinct c from cars c LEFT JOIN rent r ON c.id = r.car.id
+				where ((r.startDate NOT BETWEEN :startDate AND :endDate ) 
+				AND (r.endDate NOT BETWEEN :startDate AND :endDate ))
+				AND (r.car.id IS NULL OR r.active = 0) AND c.type = :type ORDER BY c.price DESC
+		]]>
+		</query>
+	</named-query>
+</entity-mappings>

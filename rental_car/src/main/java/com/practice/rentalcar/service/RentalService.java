@@ -21,7 +21,7 @@ public class RentalService implements IRentalService {
 	public int addRental(Rental rental) {
 		int active = 0;
 		LocalDate currentDate = LocalDate.now();
-		if(currentDate.toString().equals(rental.getStartDate())) {
+		if(currentDate==rental.getStartDate()) {
 			active = 1;
 		}
 		rental.setActive(active);
@@ -36,13 +36,13 @@ public class RentalService implements IRentalService {
 	
 	@Override
 	@Transactional
-	public List<Object> getActiveRents(){
+	public List<Rental> getActiveRents(){
 		return rentalDAO.getActiveRents();
 	}
 	
 	@Override
 	@Transactional
-	public List<Object> getInactiveRents(){
+	public List<Rental> getInactiveRents(){
 		return rentalDAO.getInactiveRents();
 	}
 	
@@ -52,7 +52,7 @@ public class RentalService implements IRentalService {
 	public void updateRental(Rental rental, int actionRental) {
 		LocalDate currentDate = LocalDate.now();
 		rental.setActive(actionRental);
-		if(actionRental == 1) rental.setStartDate(currentDate.toString()); else rental.setEndDate(currentDate.toString());
+		if(actionRental == 1) rental.setStartDate(currentDate); else rental.setEndDate(currentDate);
 		rentalDAO.updateRental(rental);
 	}
 

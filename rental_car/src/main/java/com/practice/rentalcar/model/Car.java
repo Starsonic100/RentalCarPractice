@@ -1,5 +1,7 @@
 package com.practice.rentalcar.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -60,13 +62,13 @@ public class Car {
 	@Column(name="available")
 	private int available;
 	
-	@NotBlank(message="Start Date required")
+	@NotNull(message="Start Date required")
 	@Transient
-	private String startDate;
+	private LocalDate startDate;
 	
-	@NotBlank(message="End Date required")
+	@NotNull(message="End Date required")
 	@Transient
-	private String endDate;
+	private LocalDate endDate;
 	
 	@Transient
 	private String sortCars;
@@ -119,19 +121,19 @@ public class Car {
 		this.available = available;
 	}
 
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 

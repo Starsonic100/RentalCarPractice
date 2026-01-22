@@ -1,10 +1,13 @@
 package com.practice.rentalcar.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.practice.rentalcar.customvalidations.ValidateRentalSearch;
+
 
 @Entity(name="rent")
 @Table(name="rent")
@@ -13,20 +16,28 @@ public class Rental {
 		
 	}
 
-	public Rental(String startDate, String endDate, int idCar, int idPerson) {
+	public Rental(LocalDate startDate, LocalDate endDate, int idCar, int idPerson) {
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.idCar = idCar;
-		this.idPerson = idPerson;
+	/*	this.idCar = idCar;
+		this.idPerson = idPerson;*/
 	}
 	
-	public Rental(String startDate, String endDate, int idCar, int idPerson, int active) {
+	public Rental(LocalDate startDate, LocalDate endDate, int idCar, int idPerson, int active) {
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.idCar = idCar;
-		this.idPerson = idPerson;
+		/*this.idCar = idCar;
+		this.idPerson = idPerson;*/
 		this.active = active;
 	}
+	
+	public Rental(LocalDate startDate, LocalDate endDate, Car car, Person person) {
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.car = car;
+		this.person = person;
+	}
+	
 
 	@NotNull(message="Please insert an id for Rent", groups=ValidateRentalSearch.class)
 	@Positive(message="Please insert a valid id for Rent", groups=ValidateRentalSearch.class)
@@ -36,25 +47,26 @@ public class Rental {
 	private int idRent;
 	
 	@Column(name="start_date")
-	private String startDate;
+	private LocalDate startDate;
 	
 	@Column(name="end_date")
-	private String endDate;
+	private LocalDate endDate;
 	
-	@Column(name="idCars")
-	private int idCar;
 	
-	@Column(name="idPerson")
-	private int idPerson;
+
 	
 	@Column(name="active")
 	private int active;
 	
 	
-	@Transient
+	//@Transient
+	@OneToOne
+	@JoinColumn(name="idPerson")
 	private Person person;
 	
-	@Transient
+	//@Transient
+	@OneToOne
+	@JoinColumn(name="idCars")
 	private Car car;
 
 	public int getIdRent() {
@@ -65,15 +77,15 @@ public class Rental {
 		this.idRent = idRent;
 	}
 
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 	
@@ -89,11 +101,11 @@ public class Rental {
 		return car;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
-	public int getIdCar() {
+	/*public int getIdCar() {
 		return idCar;
 	}
 
@@ -108,7 +120,7 @@ public class Rental {
 	public void setIdPerson(int idPerson) {
 		this.idPerson = idPerson;
 	}
-	
+	*/
 	public void setActive(int active) {
 		this.active = active;
 	}

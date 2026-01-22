@@ -1,9 +1,11 @@
 package com.practice.rentalcar.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -34,6 +36,7 @@ import com.practice.rentalcar.service.ICarService;
 
 public class CarController {
 	
+	private static final Logger logger = LogManager.getLogger(CarController.class);	
 	private ICarService carService;
 	@Autowired
 	@Qualifier("carService") 
@@ -45,12 +48,13 @@ public class CarController {
 	@PostMapping("/submitDateForm")
 	public ModelAndView submitDateForm(@ModelAttribute("car") @Validated(ValidateDatesForm.class) Car car, BindingResult result, @ModelAttribute("person") Person person) {
 		if(result.hasErrors()) {
+			logger.error("Please insert a start date that is equal or after current date and an end date that is after the start date");
 			ModelAndView viewMap = new ModelAndView("datesForm");
 			return viewMap;
 		}
 		else {
+		logger.trace("Obtaining cars");
 		List<Car> cars = this.carService.getFilteredCars(car.getStartDate(), car.getEndDate(), car.getType(), car.getSortCars());
-		cars.get(0).getIdCar();
 		ModelAndView viewMap = new ModelAndView("carsList");
 		viewMap.addObject("cars", cars);
 		return viewMap;
@@ -70,8 +74,8 @@ public class CarController {
 		else {
 			ModelAndView viewMap = new ModelAndView("viewSelectedCar");
 
-			String endDate = car.getEndDate();
-			String startDate = car.getStartDate();
+			LocalDate endDate = car.getEndDate();
+			LocalDate startDate = car.getStartDate();
 			car = this.carService.getSeletedCar(car.getIdCar());
 			car.setEndDate(endDate);
 			car.setStartDate(startDate);

@@ -49,6 +49,7 @@ public class PersonController {
 			return "personForm";
 		}
 		else {
+			person.setCategory(2);
 			person.setId(this.personService.addPerson(person));
 			Car car = new Car();
 			model.addAttribute("car", car);

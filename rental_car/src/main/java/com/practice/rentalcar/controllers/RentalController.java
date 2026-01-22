@@ -58,8 +58,8 @@ public class RentalController {
 		Rental rental = new Rental();
 		rental.setStartDate(car.getStartDate());
 		rental.setEndDate(car.getEndDate());
-		rental.setIdCar(car.getIdCar());
-		rental.setIdPerson(person.getId());
+		rental.setCar(car);
+		rental.setPerson(person);
 		rental.setIdRent(this.rentalService.addRental(rental));
 		model.addAttribute("rental", rental);
 		return "createdRent";
@@ -80,13 +80,13 @@ public class RentalController {
 			return viewMap;
 		}
 		else {
-			ModelAndView viewMap = new ModelAndView("viewRentalData");
-			Rental selectedRental = new Rental();
-			selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
-			if(selectedRental != null) {
-				viewMap.addObject("car", this.carService.getSeletedCar(selectedRental.getIdCar()));
-				viewMap.addObject("person", this.personService.getSelectedPerson(selectedRental.getIdPerson()));
-			}
+				ModelAndView viewMap = new ModelAndView("viewRentalData");
+				Rental selectedRental = new Rental();
+				selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
+				if(selectedRental != null) {
+					viewMap.addObject("car", this.carService.getSeletedCar(selectedRental.getCar().getIdCar()));
+					viewMap.addObject("person", this.personService.getSelectedPerson(selectedRental.getPerson().getId()));
+				}
 			viewMap.addObject("selectedRental",selectedRental);
 			return viewMap;
 		}
@@ -96,7 +96,7 @@ public class RentalController {
 	public ModelAndView viewActiveRents(Model model) {
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
-		List<Object> rents = this.rentalService.getActiveRents();
+		List<Rental> rents = this.rentalService.getActiveRents();
 		ModelAndView viewMap = new ModelAndView("viewActiveRentsList");
 		viewMap.addObject("rents", rents);
 		return viewMap;	
@@ -107,7 +107,7 @@ public class RentalController {
 		if(result.hasErrors()) {
 			Rental rentals = new Rental();
 			model.addAttribute("rental", rentals);
-			List<Object> rents = this.rentalService.getActiveRents();
+			List<Rental> rents = this.rentalService.getActiveRents();
 			ModelAndView viewMap = new ModelAndView("viewActiveRentsList");
 			viewMap.addObject("rents", rents);
 			return viewMap;	
@@ -128,7 +128,7 @@ public class RentalController {
 	public ModelAndView viewInactiveRents(Model model) {
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
-		List<Object> rents = this.rentalService.getInactiveRents();
+		List<Rental> rents = this.rentalService.getInactiveRents();
 		ModelAndView viewMap = new ModelAndView("viewInactiveRentsList");
 		viewMap.addObject("rents", rents);
 		return viewMap;	
@@ -139,7 +139,7 @@ public class RentalController {
 		if(result.hasErrors()) {
 			Rental rentals = new Rental();
 			model.addAttribute("rental", rentals);
-			List<Object> rents = this.rentalService.getInactiveRents();
+			List<Rental> rents = this.rentalService.getInactiveRents();
 			ModelAndView viewMap = new ModelAndView("viewInactiveRentsList");
 			viewMap.addObject("rents", rents);
 			return viewMap;	
