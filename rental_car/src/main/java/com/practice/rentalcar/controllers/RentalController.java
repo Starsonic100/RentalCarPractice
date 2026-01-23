@@ -123,7 +123,8 @@ public class RentalController {
 		}
 		else {
 			logger.info("Returning car");
-			this.rentalService.updateRental(rental,0);
+			Rental updateRent = this.rentalService.getSeletedRental(rental.getIdRent());
+			this.rentalService.updateRental(updateRent,0);
 			ModelAndView viewMap = new ModelAndView("carReturnMessage");
 			return viewMap;
 		}
