@@ -22,13 +22,15 @@
 					<form:label path="startDate" class="form-label">Start Date</form:label>
 					<form:input type="date" path="startDate" class="form-control"/>
 					<form:errors path="startDate" class="text-danger"/>
-					<form:errors path="" class="text-danger"/>
 				</div>
 				<div class="col-md-6">
 					<form:label path="endDate" class="form-label">End Date</form:label>
 					<form:input type="date" path="endDate" class="form-control"/>
 					<form:errors path="endDate" class="text-danger"/>
 				</div>
+					<form:errors path="" class="text-danger"/>
+				</div>
+				<div class="row">
 				<div class="col-md-4">
 		 			<form:label path="type" class="form-label">Type of Car</form:label>
 						<form:select path="type" class="form-select" >
@@ -44,6 +46,7 @@
 			<form:label path="sortCars" class="form-label">Sort by price in:</form:label>
 				<form:radiobutton path="sortCars" value="desc"/><form:label path="sortCars" class="form-check-label">Descendant Order</form:label>
 				<form:radiobutton path="sortCars" value="asc"/><form:label path="sortCars" class="form-label">Ascendant Order</form:label>
+				<form:errors path="sortCars" class="text-danger" />
 			<input type="submit" value="Find" class="btn btn-primary"/>
 			</div>
 			</form:form>

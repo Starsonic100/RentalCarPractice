@@ -6,7 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -23,6 +24,7 @@ import com.practice.rentalcar.model.Rental;
 @Repository("carDAO")
 public class CarDAO implements ICarDAO {
 
+	private static final Logger logger = LogManager.getLogger("Car");
 	private SessionFactory sessionFactory;
 	
 	@Autowired
@@ -32,16 +34,19 @@ public class CarDAO implements ICarDAO {
 	
 	@Override
 	public Car getSelectedCar(int idCar) {
+		logger.debug("Getting car");
 		Session session = sessionFactory.getCurrentSession();
 		return session.get(Car.class, idCar);
 	}
 	
 	@Override
 	public List<Car> getFilteredCars(LocalDate startDate, LocalDate endDate, String type, String namedQuery){
+		logger.debug("Getting car");
+		System.out.println(startDate);
 		Session session = sessionFactory.getCurrentSession();
 		Query <Car> query = session.createNamedQuery(namedQuery, Car.class);
-		query.setParameter("startDate", startDate.toString());
-		query.setParameter("endDate", endDate.toString());
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
 		query.setParameter("type", type);
 		return query.getResultList();
 	}

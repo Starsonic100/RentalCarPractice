@@ -5,12 +5,14 @@ import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.practice.rentalcar.customvalidations.CarType;
 import com.practice.rentalcar.customvalidations.StartEndDateValues;
 import com.practice.rentalcar.customvalidations.ValidateDatesForm;
 import com.practice.rentalcar.customvalidations.ValidateSelectCar;
 
-@StartEndDateValues( groups = ValidateDatesForm.class ,endDate = "endDate", startDate = "startDate", message="Please insert a start date equal or set after current date and an end date set after the start date") 
+@StartEndDateValues( groups = ValidateDatesForm.class ,endDate = "endDate", startDate = "startDate", message="Please insert a valid End Date set after Start Date") 
 @Entity(name="cars")
 @Table(name="cars")
 public class Car {
@@ -62,14 +64,19 @@ public class Car {
 	@Column(name="available")
 	private int available;
 	
-	@NotNull(message="Start Date required")
+	@NotNull(groups = ValidateDatesForm.class, message="Start Date required")
+	@FutureOrPresent(groups = ValidateDatesForm.class, message="Please enter current or future Start Date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) 
 	@Transient
 	private LocalDate startDate;
 	
-	@NotNull(message="End Date required")
+	@NotNull(groups = ValidateDatesForm.class, message="End Date required")
+	@Future(groups = ValidateDatesForm.class, message="Please select a future End Date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) 
 	@Transient
 	private LocalDate endDate;
 	
+	@NotNull(groups = ValidateDatesForm.class, message="Select a sort order")
 	@Transient
 	private String sortCars;
 

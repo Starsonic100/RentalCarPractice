@@ -9,7 +9,7 @@ import javax.validation.Payload;
 @Target( { ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StartEndDateValues {
-	String message() default "Please insert a start date that is equal or after current date and an end date that is after the start date";
+	String message() default "Please insert a valid End Date set after Start Date";
 	String startDate();
 	String endDate();
 	

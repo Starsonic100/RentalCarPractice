@@ -36,7 +36,7 @@ import com.practice.rentalcar.service.ICarService;
 
 public class CarController {
 	
-	private static final Logger logger = LogManager.getLogger(CarController.class);	
+	private static final Logger logger = LogManager.getLogger("Car");	
 	private ICarService carService;
 	@Autowired
 	@Qualifier("carService") 
@@ -48,13 +48,13 @@ public class CarController {
 	@PostMapping("/submitDateForm")
 	public ModelAndView submitDateForm(@ModelAttribute("car") @Validated(ValidateDatesForm.class) Car car, BindingResult result, @ModelAttribute("person") Person person) {
 		if(result.hasErrors()) {
-			logger.error("Please insert a start date that is equal or after current date and an end date that is after the start date");
+			logger.error(result.getAllErrors());
 			ModelAndView viewMap = new ModelAndView("datesForm");
 			return viewMap;
 		}
 		else {
-		logger.trace("Obtaining cars");
-		List<Car> cars = this.carService.getFilteredCars(car.getStartDate(), car.getEndDate(), car.getType(), car.getSortCars());
+		logger.info("Obtaining cars");
+		List<Car> cars = this.carService.getFilteredCars((LocalDate) car.getStartDate(),(LocalDate) car.getEndDate(), car.getType(), car.getSortCars());
 		ModelAndView viewMap = new ModelAndView("carsList");
 		viewMap.addObject("cars", cars);
 		return viewMap;
@@ -65,15 +65,15 @@ public class CarController {
 	@PostMapping(value="/selectCar", params="submit")
 	public ModelAndView selectedCar(@ModelAttribute("car") @Validated({ValidateDatesForm.class, ValidateSelectCar.class}) Car car, BindingResult result, @ModelAttribute("person") Person person, Model model) {
 		if(result.hasErrors()) {
+			logger.error("Select Car form submit failed due to variables errors");
 			List<Car> cars = this.carService.getFilteredCars(car.getStartDate(), car.getEndDate(), car.getType(), car.getSortCars());
 			ModelAndView viewMap = new ModelAndView("carsList");
-
 			viewMap.addObject("cars", cars);
 			return viewMap;		
 		}
 		else {
+			logger.info("Car selected");
 			ModelAndView viewMap = new ModelAndView("viewSelectedCar");
-
 			LocalDate endDate = car.getEndDate();
 			LocalDate startDate = car.getStartDate();
 			car = this.carService.getSeletedCar(car.getIdCar());

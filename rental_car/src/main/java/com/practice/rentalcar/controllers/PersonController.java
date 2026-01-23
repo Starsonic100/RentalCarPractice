@@ -1,5 +1,7 @@
 package com.practice.rentalcar.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -27,7 +29,8 @@ import javax.validation.Valid;
 
 @RequestMapping("/person")
 public class PersonController {
-	
+	private static final Logger logger = LogManager.getLogger("Person");	
+
 	private IPersonService personService;
 	@Autowired
 	@Qualifier("personService")
@@ -38,6 +41,7 @@ public class PersonController {
 	
 	@GetMapping("/viewPersonForm")
 	public String viewPersonForm(Model model) {
+		logger.info("Opening Person Form");
 		Person person = new Person();
 		model.addAttribute("person", person);
 		return "personForm";
@@ -46,9 +50,11 @@ public class PersonController {
 	@PostMapping("/submitForm")
 	public String submitForm(@ModelAttribute("person") @Valid Person person,  BindingResult personValidation, Model model) {
 		if(personValidation.hasErrors()) {
+			logger.error(personValidation.getAllErrors());
 			return "personForm";
 		}
 		else {
+			logger.info("Submitting new person");
 			person.setCategory(2);
 			person.setId(this.personService.addPerson(person));
 			Car car = new Car();

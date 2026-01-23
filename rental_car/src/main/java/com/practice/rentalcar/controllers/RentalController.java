@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import com.practice.rentalcar.service.IRentalService;
 
 @RequestMapping("/rental")
 public class RentalController {
+	private static final Logger logger = LogManager.getLogger("Rental");	
 	
 	private IRentalService rentalService;
 	@Autowired
@@ -55,6 +58,7 @@ public class RentalController {
 
 	@PostMapping("/createRent")
 	public String createRent(@ModelAttribute("person") Person person, @ModelAttribute("car") Car car, Model model) {
+		logger.info("Rent created");
 		Rental rental = new Rental();
 		rental.setStartDate(car.getStartDate());
 		rental.setEndDate(car.getEndDate());
@@ -68,6 +72,7 @@ public class RentalController {
 	
 	@GetMapping("/searchRentalForm")
 	public String searchRentalForm(Model model) {
+		logger.info("Searching rent");
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
 		return "searchRentalForm";
@@ -76,10 +81,12 @@ public class RentalController {
 	@GetMapping("/searchRent")
 	public ModelAndView viewRentalData(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
+			logger.error(result.getAllErrors());
 			ModelAndView viewMap = new ModelAndView("searchRentalForm");
 			return viewMap;
 		}
 		else {
+				logger.info("Searching rent");
 				ModelAndView viewMap = new ModelAndView("viewRentalData");
 				Rental selectedRental = new Rental();
 				selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
@@ -94,6 +101,7 @@ public class RentalController {
 	
 	@GetMapping("/activeRents")
 	public ModelAndView viewActiveRents(Model model) {
+		logger.info("Searching active rents");
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
 		List<Rental> rents = this.rentalService.getActiveRents();
@@ -105,6 +113,7 @@ public class RentalController {
 	@PostMapping(value="/selectRent", params="submit")
 	public ModelAndView selectedActiveRent(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
+			logger.error(result.getAllErrors());
 			Rental rentals = new Rental();
 			model.addAttribute("rental", rentals);
 			List<Rental> rents = this.rentalService.getActiveRents();
@@ -113,6 +122,7 @@ public class RentalController {
 			return viewMap;	
 		}
 		else {
+			logger.info("Returning car");
 			this.rentalService.updateRental(rental,0);
 			ModelAndView viewMap = new ModelAndView("carReturnMessage");
 			return viewMap;
@@ -126,6 +136,7 @@ public class RentalController {
 	
 	@GetMapping("/inactiveRents")
 	public ModelAndView viewInactiveRents(Model model) {
+		logger.info("Searching inactive rents");
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
 		List<Rental> rents = this.rentalService.getInactiveRents();
@@ -137,15 +148,19 @@ public class RentalController {
 	@PostMapping(value="/selectInactiveRent", params="submit")
 	public ModelAndView selectedInactiveRent(@ModelAttribute("rental") @Validated(ValidateRentalSearch.class) Rental rental, BindingResult result, Model model) {
 		if(result.hasErrors()) {
+			logger.error(result.getAllErrors());
 			Rental rentals = new Rental();
 			model.addAttribute("rental", rentals);
 			List<Rental> rents = this.rentalService.getInactiveRents();
+			logger.trace(rents.toString());
 			ModelAndView viewMap = new ModelAndView("viewInactiveRentsList");
 			viewMap.addObject("rents", rents);
 			return viewMap;	
 		}
 		else {
-			this.rentalService.updateRental(rental,1);
+			logger.info("Activating rent");
+			Rental updateRent = this.rentalService.getSeletedRental(rental.getIdRent());
+			this.rentalService.updateRental(updateRent,1);
 			ModelAndView viewMap = new ModelAndView("rentInactiveMessage");
 			return viewMap;
 		}
