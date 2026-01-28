@@ -26,15 +26,17 @@ public class PersonDAO implements IPersonDAO {
 
 	@Override
 	public int addPerson(Person person) {
-		logger.debug("Adding person");
+		logger.info("Adding person to database");
 		Session session = sessionFactory.getCurrentSession();
 		session.save(person);
+		logger.debug("Id: {} , name: {} {}", person.getId(), person.getName(), person.getSurname());
+		logger.info("Person added");
 		return person.getId();
 	}
 	
 	@Override
 	public Person getSelectedPerson(int idPerson) {
-		logger.debug("Selecting person");
+		logger.info("Getting selected person");
 		Session session = sessionFactory.getCurrentSession();
 		return session.get(Person.class, idPerson);
 	}

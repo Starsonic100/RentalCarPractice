@@ -24,7 +24,7 @@ public class CarService implements ICarService {
 	@Override
 	@Transactional
 	public List<Car> getFilteredCars(LocalDate startDate, LocalDate endDate, String type, String sortCars){
-		logger.info("Service: Getting cars");
+		logger.trace("Service: Getting cars");
 		if(sortCars.equals("ASC")) {
 			return carDAO.getFilteredCars(startDate, endDate, type, "GET_FILTERED_CARS_ASC");
 		}
@@ -34,7 +34,7 @@ public class CarService implements ICarService {
 	@Override
 	@Transactional
 	public Car getSeletedCar(int idCar) {
-		logger.info("Service: Getting selected cars");
+		logger.trace("Service: Getting selected cars");
 		return carDAO.getSelectedCar(idCar);
 	}
 

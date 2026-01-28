@@ -27,5 +27,6 @@
         <Logger name="Rental" level="info" additivity="false" >
             <AppenderRef ref="LogFile" />
         </Logger>
+       
     </Loggers>
 </Configuration>

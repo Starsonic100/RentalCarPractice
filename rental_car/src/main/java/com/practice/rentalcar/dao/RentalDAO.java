@@ -32,22 +32,24 @@ public class RentalDAO implements IRentalDAO {
 
 	@Override
 	public int addRental(Rental rental) {
-		logger.debug("Adding rent");
+		logger.info("Adding rent to database");
 		Session session = sessionFactory.getCurrentSession();
 		session.save(rental);
+		logger.debug("Id: {} , Start Date: {} , End Date: {}", rental.getIdRent(), rental.getStartDate());
+		logger.info("Rent added");
 		return rental.getIdRent();		
 	}
 	
 	@Override
 	public Rental getSelectedRental(int idRent) {
-		logger.debug("Getting rent");
+		logger.info("Getting selected rent with id {}", idRent);
 		Session session = sessionFactory.getCurrentSession();
 		return session.get(Rental.class, idRent);
 	}
 	
 
 	public List<Rental> getActiveRents(){
-		logger.debug("Selecting active rents");
+		logger.info("Selecting active rents");
 		Session session = sessionFactory.getCurrentSession();
 		Query<Rental> query = session.createNamedQuery("GET_ACTIVE_RENTS",Rental.class);
 		return query.getResultList();
@@ -55,7 +57,7 @@ public class RentalDAO implements IRentalDAO {
 	
 	@Override
 	public List<Rental> getInactiveRents(){
-		logger.debug("Selecting inactive rents");
+		logger.info("Selecting inactive rents");
 		Session session = sessionFactory.getCurrentSession();
 		LocalDate currentDate = LocalDate.now();
 		Query<Rental> query = session.createNamedQuery("GET_INACTIVE_RENTS",Rental.class);
@@ -65,12 +67,8 @@ public class RentalDAO implements IRentalDAO {
 	
 	@Override
 	public void updateRental(Rental rental) {
-		logger.debug("Updating rent");
+		logger.debug("Updating rent: {}", rental.getIdRent());
 		Session session = sessionFactory.getCurrentSession();
-		/*Rental updateRental = session.get(Rental.class, rental.getIdRent());
-		updateRental.setStartDate(rental.getStartDate());
-		updateRental.setEndDate(rental.getEndDate());
-		updateRental.setActive(rental.getActive());|*/
 		session.saveOrUpdate(rental);
 	}
 
