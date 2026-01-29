@@ -44,6 +44,7 @@ public class PersonController {
 		logger.info("Opening Person Form");
 		Person person = new Person();
 		model.addAttribute("person", person);
+		logger.info("New Person attribute added to model");
 		return "personForm";
 	}
 	
@@ -57,8 +58,10 @@ public class PersonController {
 			logger.info("Submitting new person");
 			person.setCategory(2);
 			person.setId(this.personService.addPerson(person));
+			logger.debug("Person with id {} attribute added model", person.getId());
 			Car car = new Car();
 			model.addAttribute("car", car);
+			logger.info("New car model added");
 			return "datesForm";
 		}
 	}

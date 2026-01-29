@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class HomeController {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(Model model) {
-        TimeZone.setDefault(TimeZone.getTimeZone(ZoneOffset.UTC));				
         return "home";
 	}
 }

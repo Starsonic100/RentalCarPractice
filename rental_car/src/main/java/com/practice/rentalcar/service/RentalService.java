@@ -61,6 +61,7 @@ public class RentalService implements IRentalService {
 		logger.info("Service: Updating rent");
 		LocalDate currentDate = LocalDate.now();
 		rental.setActive(actionRental);
+		logger.debug("Rental will be updated with currentDate {} based on action for rent: {}", currentDate.toString(), actionRental);
 		if(actionRental == 1) rental.setStartDate(currentDate); else rental.setEndDate(currentDate);
 		rentalDAO.updateRental(rental);
 	}

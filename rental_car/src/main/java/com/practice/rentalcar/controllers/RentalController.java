@@ -66,13 +66,14 @@ public class RentalController {
 		rental.setPerson(person);
 		rental.setIdRent(this.rentalService.addRental(rental));
 		model.addAttribute("rental", rental);
+		logger.info("Rent with id: {} added to model", rental.getIdRent());
 		return "createdRent";
 	}
 	
 	
 	@GetMapping("/searchRentalForm")
 	public String searchRentalForm(Model model) {
-		logger.info("Searching rent");
+		logger.info("Redirecting to rental form search");
 		Rental rental = new Rental();
 		model.addAttribute("rental", rental);
 		return "searchRentalForm";
@@ -91,11 +92,12 @@ public class RentalController {
 				Rental selectedRental = new Rental();
 				selectedRental = this.rentalService.getSeletedRental(rental.getIdRent());
 				if(selectedRental != null) {
+					logger.debug("Selected rental {} exists", selectedRental.getIdRent());
 					viewMap.addObject("car", this.carService.getSeletedCar(selectedRental.getCar().getIdCar()));
 					viewMap.addObject("person", this.personService.getSelectedPerson(selectedRental.getPerson().getId()));
 				}
-			viewMap.addObject("selectedRental",selectedRental);
-			return viewMap;
+				viewMap.addObject("selectedRental",selectedRental);
+				return viewMap;
 		}
 	}
 	
@@ -107,6 +109,7 @@ public class RentalController {
 		List<Rental> rents = this.rentalService.getActiveRents();
 		ModelAndView viewMap = new ModelAndView("viewActiveRentsList");
 		viewMap.addObject("rents", rents);
+		logger.info("Active rents added to model");
 		return viewMap;	
 	}
 	
@@ -122,9 +125,10 @@ public class RentalController {
 			return viewMap;	
 		}
 		else {
-			logger.info("Returning car");
+			logger.info("Returning car and reactivating rent");
 			Rental updateRent = this.rentalService.getSeletedRental(rental.getIdRent());
 			this.rentalService.updateRental(updateRent,0);
+			logger.debug("Rental with Id {} has been moved to inactive", rental.getIdRent());
 			ModelAndView viewMap = new ModelAndView("carReturnMessage");
 			return viewMap;
 		}
@@ -143,6 +147,7 @@ public class RentalController {
 		List<Rental> rents = this.rentalService.getInactiveRents();
 		ModelAndView viewMap = new ModelAndView("viewInactiveRentsList");
 		viewMap.addObject("rents", rents);
+		logger.info("Inactive rents added to model");
 		return viewMap;	
 	}
 	
@@ -163,6 +168,7 @@ public class RentalController {
 			Rental updateRent = this.rentalService.getSeletedRental(rental.getIdRent());
 			this.rentalService.updateRental(updateRent,1);
 			ModelAndView viewMap = new ModelAndView("rentInactiveMessage");
+			logger.debug("Rental with Id {} has been moved to active", rental.getIdRent());
 			return viewMap;
 		}
 	}

@@ -55,6 +55,7 @@ public class CarController {
 		else {
 		logger.info("Obtaining cars");
 		List<Car> cars = this.carService.getFilteredCars((LocalDate) car.getStartDate(),(LocalDate) car.getEndDate(), car.getType(), car.getSortCars());
+		logger.info("List of cars obtained");
 		ModelAndView viewMap = new ModelAndView("carsList");
 		viewMap.addObject("cars", cars);
 		return viewMap;
@@ -72,13 +73,15 @@ public class CarController {
 			return viewMap;		
 		}
 		else {
-			logger.info("Car selected");
+			logger.info("Car with id {} selected on form", car.getIdCar());
 			ModelAndView viewMap = new ModelAndView("viewSelectedCar");
 			LocalDate endDate = car.getEndDate();
 			LocalDate startDate = car.getStartDate();
 			car = this.carService.getSeletedCar(car.getIdCar());
+			logger.debug("Car with id: {} recovered from database",car.getIdCar());
 			car.setEndDate(endDate);
 			car.setStartDate(startDate);
+			logger.debug("Start Date: {} and End Date: {} set on selected car",car.getStartDate(), car.getEndDate());
 			model.addAttribute("car", car);
 			return viewMap;
 		}
@@ -88,6 +91,7 @@ public class CarController {
 	public String returnDateForm(Model model,  @ModelAttribute("person") Person person) {
 		Car car = new Car();
 		model.addAttribute("car", car);
+		logger.debug("Car selection cancelled, returning to dates Form");
 		return "datesForm";
 	}
 }
