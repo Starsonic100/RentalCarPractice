@@ -42,7 +42,6 @@ public class CarDAO implements ICarDAO {
 	@Override
 	public List<Car> getFilteredCars(LocalDate startDate, LocalDate endDate, String type, String namedQuery){
 		logger.info("Getting filtered cars");
-		System.out.println(startDate);
 		Session session = sessionFactory.getCurrentSession();
 		Query <Car> query = session.createNamedQuery(namedQuery, Car.class);
 		query.setParameter("startDate", startDate);

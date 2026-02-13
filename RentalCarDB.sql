@@ -30,7 +30,7 @@ CREATE TABLE `cars` (
   `type` varchar(45) NOT NULL,
   `price` int NOT NULL,
   `available` int NOT NULL DEFAULT '1',
-  PRIMARY KEY (`idCars`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,7 +48,7 @@ CREATE TABLE `person` (
   `email` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
   `person_category` int DEFAULT NULL,
-  PRIMARY KEY (`idPerson`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -69,8 +69,8 @@ CREATE TABLE `rent` (
   PRIMARY KEY (`idRent`,`idCars`,`idPerson`),
   KEY `fk_Rent_Cars1_idx` (`idCars`),
   KEY `fk_Rent_Person1_idx` (`idPerson`),
-  CONSTRAINT `fk_Rent_Cars1` FOREIGN KEY (`idCars`) REFERENCES `cars` (`idCars`),
-  CONSTRAINT `fk_Rent_Person1` FOREIGN KEY (`idPerson`) REFERENCES `person` (`idPerson`)
+  CONSTRAINT `fk_Rent_Cars1` FOREIGN KEY (`idCars`) REFERENCES `cars` (`id`),
+  CONSTRAINT `fk_Rent_Person1` FOREIGN KEY (`idPerson`) REFERENCES `person` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
