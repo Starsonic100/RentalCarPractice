@@ -64,7 +64,7 @@ public class RentalController {
 		rental.setEndDate(car.getEndDate());
 		rental.setCar(car);
 		rental.setPerson(person);
-		rental.setIdRent(this.rentalService.addRental(rental));
+		rental.setIdRent(this.rentalService.addRental(rental, car.getStartDate()));
 		model.addAttribute("rental", rental);
 		logger.info("Rent with id: {} added to model", rental.getIdRent());
 		return "createdRent";
@@ -134,7 +134,7 @@ public class RentalController {
 		}
 	}
 	
-	@GetMapping(value={"/selectRent","/selectInactiveRent"}, params="cancel")
+	@PostMapping(value={"/selectRent","/selectInactiveRent"}, params="cancel")
 	public String returnHome(Model model) {
 		return "home";
 	}

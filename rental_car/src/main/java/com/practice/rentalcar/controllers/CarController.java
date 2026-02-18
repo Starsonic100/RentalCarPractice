@@ -53,12 +53,12 @@ public class CarController {
 			return viewMap;
 		}
 		else {
-		logger.info("Obtaining cars");
-		List<Car> cars = this.carService.getFilteredCars((LocalDate) car.getStartDate(),(LocalDate) car.getEndDate(), car.getType(), car.getSortCars());
-		logger.info("List of cars obtained");
-		ModelAndView viewMap = new ModelAndView("carsList");
-		viewMap.addObject("cars", cars);
-		return viewMap;
+			logger.info("Obtaining cars");
+			List<Car> cars = this.carService.getFilteredCars((LocalDate) car.getStartDate(),(LocalDate) car.getEndDate(), car.getType(), car.getSortCars());
+			logger.info("List of cars obtained");
+			ModelAndView viewMap = new ModelAndView("carsList");
+			viewMap.addObject("cars", cars);
+			return viewMap;
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class CarController {
 		}
 	}
 	
-	@GetMapping(value="/selectCar", params="cancel")
+	@PostMapping(value="/selectCar", params="cancel")
 	public String returnDateForm(Model model,  @ModelAttribute("person") Person person) {
 		Car car = new Car();
 		model.addAttribute("car", car);

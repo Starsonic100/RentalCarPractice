@@ -18,7 +18,7 @@
 		<div class="col-md-4">
 			<table class="table table-striped-columns">
 			<tr><td>Rent Id</td><td> ${rental.getIdRent()} </td></tr>
-			<tr><td>Full name</td><td> ${person.getName()}</td></tr>
+			<tr><td>Full name</td><td> ${person.getName()} ${person.getSurname()}</td></tr>
 			<tr><td>Start Date</td><td> ${car.getStartDate()}</td></tr>
 			<tr><td>End Date</td><td> ${car.getEndDate()}</td></tr>
 			<tr><td>Model</td><td> ${car.getModel()}</td></tr>

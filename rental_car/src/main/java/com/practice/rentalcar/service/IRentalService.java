@@ -1,5 +1,6 @@
 package com.practice.rentalcar.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.practice.rentalcar.model.Car;
@@ -8,7 +9,7 @@ import com.practice.rentalcar.model.Rental;
 
 public interface IRentalService {
 
-	int addRental(Rental rental);
+	int addRental(Rental rental, LocalDate startDate);
 	Rental getSeletedRental(int idRent);
 	List<Rental> getActiveRents();
 	List<Rental> getInactiveRents();

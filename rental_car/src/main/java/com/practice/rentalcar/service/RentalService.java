@@ -22,11 +22,11 @@ public class RentalService implements IRentalService {
 	
 	@Override
 	@Transactional
-	public int addRental(Rental rental) {
+	public int addRental(Rental rental, LocalDate startDate) {
 		logger.info("Service: Adding rent");
 		int active = 0;
 		LocalDate currentDate = LocalDate.now();
-		if(currentDate==rental.getStartDate()) {
+		if(currentDate.isEqual(startDate)) {
 			active = 1;
 		}
 		rental.setActive(active);

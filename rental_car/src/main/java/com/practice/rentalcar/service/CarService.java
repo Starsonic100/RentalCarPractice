@@ -25,7 +25,7 @@ public class CarService implements ICarService {
 	@Transactional
 	public List<Car> getFilteredCars(LocalDate startDate, LocalDate endDate, String type, String sortCars){
 		logger.trace("Service: Getting cars");
-		if(sortCars.equals("ASC")) {
+		if(sortCars.equals("asc")) {
 			return carDAO.getFilteredCars(startDate, endDate, type, "GET_FILTERED_CARS_ASC");
 		}
 		return carDAO.getFilteredCars(startDate, endDate, type, "GET_FILTERED_CARS_DESC");

@@ -20,11 +20,8 @@ public class StartEndDateValidation implements ConstraintValidator<StartEndDateV
 	public boolean isValid(Object dateObject, ConstraintValidatorContext context) {
 		LocalDate startDateObject = (LocalDate) new BeanWrapperImpl(dateObject).getPropertyValue(startDate);
 		LocalDate endDateObject = (LocalDate) new BeanWrapperImpl(dateObject).getPropertyValue(endDate); 
-		LocalDate currentDate = LocalDate.now();
 		if(startDateObject!=null&&endDateObject!=null) {
-			LocalDate startDateValue = LocalDate.parse(startDateObject.toString());
-			LocalDate endDateValue = LocalDate.parse(endDateObject.toString());
-			return (startDateValue.isBefore(endDateValue)); 
+			return (startDateObject.isBefore(endDateObject)); 
 		}
 		return false;
 	}

@@ -51,7 +51,7 @@
 			<div class="col-md-4">
 			<form:form action="selectCar" modelAttribute="car">
 				<h4>Sorry, no cars are available for the selected dates</h4><br>
-				<input type="submit" name="cancel" value="Return to previous page"/>
+				<input type="submit" name="cancel" value="Return to previous page" class="btn btn-primary"/>
 			</form:form>
 			</div>
 		</div>
