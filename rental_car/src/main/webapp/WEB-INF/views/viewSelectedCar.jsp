@@ -19,7 +19,7 @@
 		<div class="row">
 			<div class="col-md-4">
 				<table class="table table-striped">
-					<tr><td>Full name: ${person.getName()} ${person.getSurname}</td></tr>
+					<tr><td>Full name: ${person.getName()} ${person.getSurname()}</td></tr>
 						<tr><td>Start Date: ${car.getStartDate()}</td></tr>
 						<tr><td>End Date: ${car.getEndDate()}</td></tr>
 						<tr><td>Model: ${car.getModel()}</td></tr>

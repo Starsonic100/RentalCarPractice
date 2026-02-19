@@ -24,12 +24,11 @@
 		<query>
 		<![CDATA[
 				select distinct c from cars c LEFT JOIN rent r ON c.id = r.car.id
-				where ((r.startDate NOT BETWEEN :startDate AND :endDate 
+				where (r.active=0 AND (r.startDate NOT BETWEEN :startDate AND :endDate 
 				AND r.endDate NOT BETWEEN :startDate AND :endDate )
-				OR ( :startDate NOT BETWEEN r.startDate AND r.endDate 
+				AND ( :startDate NOT BETWEEN r.startDate AND r.endDate 
 				AND :endDate NOT BETWEEN r.startDate AND r.endDate))
-				OR (r.car.id IS NULL OR (r.active = 0 AND ((r.startDate > :startDate AND r.endDate > :endDate)
-				OR r.startDate < :startDate AND r.endDate < :endDate)))
+				OR (r.car.id IS NULL)
 				AND c.type = :type ORDER BY c.price ASC
 		]]>
 		</query>
@@ -38,12 +37,11 @@
 		<query>
 		<![CDATA[
 				select distinct c from cars c LEFT JOIN rent r ON c.id = r.car.id
-				where ((r.startDate NOT BETWEEN :startDate AND :endDate 
+				where (r.active=0 AND (r.startDate NOT BETWEEN :startDate AND :endDate 
 				AND r.endDate NOT BETWEEN :startDate AND :endDate )
-				OR ( :startDate NOT BETWEEN r.startDate AND r.endDate 
+				AND ( :startDate NOT BETWEEN r.startDate AND r.endDate 
 				AND :endDate NOT BETWEEN r.startDate AND r.endDate))
-				OR (r.car.id IS NULL OR (r.active = 0 AND ((r.startDate > :startDate AND r.endDate > :endDate)
-				OR r.startDate < :startDate AND r.endDate < :endDate)))
+				OR (r.car.id IS NULL)
 				AND c.type = :type ORDER BY c.price DESC
 		]]>
 		</query>
